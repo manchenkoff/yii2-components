@@ -1,0 +1,20 @@
+{
+    "name": "manchenkov/yii2-components",
+    "description": "Improved components for Yii 2 project",
+    "type": "yii2-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Artem Manchenkov",
+            "email": "artyom@manchenkoff.me"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "manchenkov\\yii\\": "src/"
+        }
+    },
+    "require": {
+        "manchenkov/yii2-helpers": "^1.0"
+    }
+}
