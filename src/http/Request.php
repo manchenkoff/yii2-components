@@ -23,6 +23,8 @@ use yii\web\Request as BaseRequest;
  *      ...
  * ],
  * ```
+ *
+ * @property string $languageFromUrl
  */
 class Request extends BaseRequest
 {

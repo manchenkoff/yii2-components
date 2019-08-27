@@ -15,6 +15,7 @@
         }
     },
     "require": {
-        "manchenkov/yii2-helpers": "^1.0"
+        "manchenkov/yii2-helpers": "^1.0",
+        "bocharsky-bw/arrayzy": "^0.6.1"
     }
 }

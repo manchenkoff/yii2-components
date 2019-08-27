@@ -12,6 +12,9 @@ use yii\web\View;
 
 /**
  * Class for simplifying work with SEO and meta HTML tags
+ * @property array $config
+ * @property string $logo
+ * @property string $name
  * @property string $title
  */
 class Seo extends BaseObject

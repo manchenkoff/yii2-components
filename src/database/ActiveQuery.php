@@ -7,7 +7,6 @@
 
 namespace manchenkov\yii\database;
 
-use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery as AQ;
 use yii\web\NotFoundHttpException;
 
@@ -22,8 +21,10 @@ class ActiveQuery extends AQ
 {
     /**
      * Gets IDs of result records
+     *
+     * @param string $column
+     *
      * @return array
-     * @throws InvalidConfigException
      */
     public function ids(string $column = 'id')
     {
@@ -35,8 +36,9 @@ class ActiveQuery extends AQ
      *
      * @param int $id
      *
+     * @param string $column
+     *
      * @return ActiveQuery
-     * @throws InvalidConfigException
      */
     public function byID(int $id, string $column = 'id')
     {
