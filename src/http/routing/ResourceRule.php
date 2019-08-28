@@ -21,7 +21,7 @@ use yii\web\UrlRuleInterface;
  *    'GET posts/<id>' => 'post/view',
  *    'GET posts/<id>/edit' => 'post/edit',
  *    'POST posts/<id>' => 'post/update',
- *    'DELETE posts/<id>' => 'post/destroy',
+ *    'DELETE posts/<id>' => 'post/delete',
  *
  * @package manchenkov\yii\http\routing
  */
