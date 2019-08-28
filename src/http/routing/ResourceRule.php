@@ -10,7 +10,6 @@ namespace manchenkov\yii\http\routing;
 use yii\base\InvalidConfigException;
 use yii\helpers\Inflector;
 use yii\web\CompositeUrlRule;
-use yii\web\UrlRuleInterface;
 
 /**
  * Class ResourceRule automatically creates the URL rules for a resource controller
@@ -52,10 +51,18 @@ class ResourceRule extends CompositeUrlRule
     protected $prefix;
 
     /**
-     * Additional rules for resource controller
+     * Additional rules for resource controller (without controller name)
      * @var RouterRule[]
      */
     protected $extraRules = [];
+
+    /**
+     * Overrides parent action
+     */
+    public function init()
+    {
+        $this->rules = [];
+    }
 
     /**
      * Defaults resource controller routes
@@ -81,13 +88,25 @@ class ResourceRule extends CompositeUrlRule
     }
 
     /**
-     * URL rules normalization
-     *
-     * @param array $rules
+     * Builds all of the resource controller routes
+     * @throws InvalidConfigException
+     */
+    public function build()
+    {
+        $this->rules = array_merge(
+            $this->resourceRules(),
+            $this->extraRules
+        );
+
+        $this->createRules();
+    }
+
+    /**
+     * Creates the URL rules for a resource controller with normalization
      *
      * @throws InvalidConfigException
      */
-    protected function normalizeRules(array $rules)
+    protected function createRules()
     {
         // build full controller URL prefix
         $normalizedPrefix = $this->pluralize
@@ -100,7 +119,7 @@ class ResourceRule extends CompositeUrlRule
         }
 
         // normalize each rule
-        foreach ($rules as $rule) {
+        foreach ($this->rules as $rule) {
             // check rules class
             if (!$rule instanceof RouterRule) {
                 throw new InvalidConfigException('All rules must be an instance of RouterRule class');
@@ -114,28 +133,6 @@ class ResourceRule extends CompositeUrlRule
 
             $rule->build();
         }
-    }
-
-    /**
-     * Builds all of the resource controller routes
-     */
-    public function build()
-    {
-        $this->rules = array_merge(
-            $this->resourceRules(),
-            $this->extraRules
-        );
-    }
-
-    /**
-     * Creates the URL rules for a resource controller
-     *
-     * @return UrlRuleInterface[] the URL rules
-     * @throws InvalidConfigException
-     */
-    protected function createRules()
-    {
-        return $this->normalizeRules($this->rules);
     }
 
     /**
