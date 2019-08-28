@@ -26,7 +26,7 @@ class Route
         ];
 
         if ($method) {
-            $config['verb'] = $method;
+            $config['verb'] = [$method];
         }
 
         return new RouterRule($config);
