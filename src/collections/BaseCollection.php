@@ -12,7 +12,6 @@ use manchenkov\yii\collections\traits\ConvertibleTrait;
 use manchenkov\yii\collections\traits\SortableTrait;
 use ArrayAccess;
 use Arrayzy\Interfaces\DoubleEndedQueueInterface;
-use Arrayzy\Interfaces\TraversableInterface;
 use Arrayzy\Traits\DoubleEndedQueueTrait;
 use Arrayzy\Traits\TraversableTrait;
 use Countable;
@@ -21,7 +20,7 @@ use IteratorAggregate;
 /**
  * Abstract BaseCollection class to manage elements with improved functionality
  */
-abstract class BaseCollection implements DoubleEndedQueueInterface, TraversableInterface,
+abstract class BaseCollection implements DoubleEndedQueueInterface,
     IteratorAggregate, ArrayAccess, Countable, CollectionInterface
 {
     /**
