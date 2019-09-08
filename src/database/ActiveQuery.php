@@ -149,7 +149,7 @@ class ActiveQuery extends AQ
      *
      * @return array|\yii\db\ActiveRecord|null
      */
-    protected function first(string $column = 'created_at')
+    public function first(string $column = 'created_at')
     {
         return $this->orderBy($column . ' asc')->one();
     }
@@ -161,7 +161,7 @@ class ActiveQuery extends AQ
      *
      * @return array|\yii\db\ActiveRecord|null
      */
-    protected function last(string $column = 'created_at')
+    public function last(string $column = 'created_at')
     {
         return $this->orderBy($column . ' desc')->one();
     }
@@ -173,7 +173,7 @@ class ActiveQuery extends AQ
      *
      * @return array|\yii\db\ActiveRecord|null
      */
-    protected function newest(string $column = 'created_at')
+    public function newest(string $column = 'created_at')
     {
         return $this->last($column);
     }
@@ -185,7 +185,7 @@ class ActiveQuery extends AQ
      *
      * @return array|\yii\db\ActiveRecord|null
      */
-    protected function oldest(string $column = 'created_at')
+    public function oldest(string $column = 'created_at')
     {
         return $this->first($column);
     }
