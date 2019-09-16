@@ -117,18 +117,6 @@ class ActiveQuery extends AQ
     }
 
     /**
-     * Creates a new ActiveCollection instance with query results
-     *
-     * @param array $records
-     *
-     * @return ActiveCollection
-     */
-    protected function collection(array $records)
-    {
-        return new ActiveCollection($records, $this->modelClass);
-    }
-
-    /**
      * Returns result of a query set
      *
      * @param null $db
@@ -139,7 +127,12 @@ class ActiveQuery extends AQ
     {
         $data = parent::all($db);
 
-        return ($this->asArray) ? $data : $this->collection($data);
+        /** @var ActiveRecord $activeRecordClass */
+        $activeRecordClass = $this->modelClass;
+
+        return ($this->asArray)
+            ? $data
+            : $activeRecordClass::collection($data);
     }
 
     /**

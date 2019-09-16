@@ -19,6 +19,18 @@ class ActiveRecord extends AR
     use Printable;
 
     /**
+     * Returns a new ActiveCollection instance with query results
+     *
+     * @param array $items
+     *
+     * @return ActiveCollection
+     */
+    public static function collection(array $items)
+    {
+        return new ActiveCollection($items, static::class);
+    }
+
+    /**
      * The method with automatic exception throwing when not found a model
      *
      * @param $condition
@@ -64,6 +76,27 @@ class ActiveRecord extends AR
     }
 
     /**
+     * ActiveRecord `hasMany` method with automatic resolve columns names
+     *
+     * @param $class
+     * @param array $link
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function hasMany($class, $link = [])
+    {
+        /** @var $class ActiveRecord */
+        if (empty($link)) {
+            $table = static::tableName();
+            $pk = current(static::primaryKey());
+
+            $link = ["{$table}_{$pk}" => $pk];
+        }
+
+        return parent::hasMany($class, $link);
+    }
+
+    /**
      * ActiveRecord `hasOne` reverse-method
      *
      * @param $class
@@ -82,5 +115,26 @@ class ActiveRecord extends AR
         }
 
         return parent::hasOne($class, $link);
+    }
+
+    /**
+     * ActiveRecord `hasMany` reverse-method
+     *
+     * @param $class
+     * @param array $link
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function belongsToMany($class, $link = [])
+    {
+        /** @var $class ActiveRecord */
+        if (empty($link)) {
+            $table = $class::tableName();
+            $pk = current($class::primaryKey());
+
+            $link = [$pk => "{$table}_{$pk}"];
+        }
+
+        return parent::hasMany($class, $link);
     }
 }
