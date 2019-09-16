@@ -116,25 +116,4 @@ class ActiveRecord extends AR
 
         return parent::hasOne($class, $link);
     }
-
-    /**
-     * ActiveRecord `hasMany` reverse-method
-     *
-     * @param $class
-     * @param array $link
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function belongsToMany($class, $link = [])
-    {
-        /** @var $class ActiveRecord */
-        if (empty($link)) {
-            $table = $class::tableName();
-            $pk = current($class::primaryKey());
-
-            $link = [$pk => "{$table}_{$pk}"];
-        }
-
-        return parent::hasMany($class, $link);
-    }
 }
