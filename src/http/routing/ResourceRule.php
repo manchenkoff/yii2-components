@@ -17,10 +17,10 @@ use yii\web\CompositeUrlRule;
  * Example:
  *    'GET posts' => 'post/index',
  *    'POST posts' => 'post/store',
- *    'GET posts/<id>' => 'post/view',
- *    'GET posts/<id>/edit' => 'post/edit',
- *    'POST posts/<id>' => 'post/update',
- *    'DELETE posts/<id>' => 'post/delete',
+ *    'GET posts/<token>' => 'post/view',
+ *    'GET posts/<token>/edit' => 'post/edit',
+ *    'POST posts/<token>' => 'post/update',
+ *    'DELETE posts/<token>' => 'post/delete',
  *
  * @package manchenkov\yii\http\routing
  */
@@ -40,9 +40,10 @@ class ResourceRule extends CompositeUrlRule
 
     /**
      * Controller key to search models
+     * Default value is resource controller name: `$this->controller`
      * @var string
      */
-    protected $token = 'id';
+    protected $token;
 
     /**
      * URL prefix
@@ -70,6 +71,10 @@ class ResourceRule extends CompositeUrlRule
      */
     protected function resourceRules()
     {
+        if (is_null($this->token)) {
+            $this->token = $this->controller;
+        }
+
         return [
             // GET controller => controller/index
             Route::get("", "index"),
