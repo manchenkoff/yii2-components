@@ -281,7 +281,7 @@ class ActiveCollection extends BaseCollection
     {
         $completed = true;
 
-        app()->db->transaction->begin();
+        app()->db->beginTransaction();
 
         foreach ($this->elements as $item) {
             if (!$item->save()) {
@@ -309,7 +309,7 @@ class ActiveCollection extends BaseCollection
     {
         $completed = true;
 
-        app()->db->transaction->begin();
+        app()->db->beginTransaction();
 
         foreach ($this->elements as $item) {
             if (!$item->delete()) {
