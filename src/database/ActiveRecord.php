@@ -60,7 +60,7 @@ class ActiveRecord extends AR
      * @param $class
      * @param array $link
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery|\yii\db\ActiveQuery
      */
     public function hasOne($class, $link = [])
     {
@@ -81,7 +81,7 @@ class ActiveRecord extends AR
      * @param $class
      * @param array $link
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery|\yii\db\ActiveQuery
      */
     public function hasMany($class, $link = [])
     {
@@ -102,7 +102,7 @@ class ActiveRecord extends AR
      * @param $class
      * @param array $link
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery|\yii\db\ActiveQuery
      */
     public function belongsTo($class, $link = [])
     {

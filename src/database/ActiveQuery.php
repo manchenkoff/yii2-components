@@ -121,7 +121,7 @@ class ActiveQuery extends AQ
      *
      * @param null $db
      *
-     * @return ActiveCollection|array|\yii\db\ActiveRecord[]
+     * @return ActiveCollection|array|\yii\db\ActiveRecord[]|ActiveRecord[]
      */
     public function all($db = null)
     {
@@ -140,7 +140,7 @@ class ActiveQuery extends AQ
      *
      * @param string $column
      *
-     * @return array|\yii\db\ActiveRecord|null
+     * @return array|\yii\db\ActiveRecord|ActiveRecord|null
      */
     public function first(string $column = 'created_at')
     {
@@ -152,7 +152,7 @@ class ActiveQuery extends AQ
      *
      * @param string $column
      *
-     * @return array|\yii\db\ActiveRecord|null
+     * @return array|\yii\db\ActiveRecord|ActiveRecord|null
      */
     public function last(string $column = 'created_at')
     {
@@ -164,7 +164,7 @@ class ActiveQuery extends AQ
      *
      * @param string $column
      *
-     * @return array|\yii\db\ActiveRecord|null
+     * @return array|\yii\db\ActiveRecord|ActiveRecord|null
      */
     public function newest(string $column = 'created_at')
     {
@@ -176,7 +176,7 @@ class ActiveQuery extends AQ
      *
      * @param string $column
      *
-     * @return array|\yii\db\ActiveRecord|null
+     * @return array|\yii\db\ActiveRecord|ActiveRecord|null
      */
     public function oldest(string $column = 'created_at')
     {
