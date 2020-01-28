@@ -7,15 +7,11 @@
 
 namespace manchenkov\yii\database\traits;
 
-use yii\db\ActiveRecordInterface;
-
 /**
  * Trait SoftDelete for safe deleting model records (deleted_at timestamp)
  *
  * @property int $deleted_at
  * @property-read bool $isDeleted
- *
- * @mixin ActiveRecordInterface
  */
 trait SoftDelete
 {
