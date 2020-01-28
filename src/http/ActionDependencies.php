@@ -32,7 +32,7 @@ trait ActionDependencies
      * @throws ReflectionException
      * @throws NotFoundHttpException
      */
-    public function bindActionParams($action, $params)
+    public function bindActionParams($action, $params): array
     {
         // make callable items for resolving
         if ($action instanceof InlineAction) {

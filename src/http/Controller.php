@@ -29,7 +29,7 @@ abstract class Controller extends BaseController
      *
      * @return Response
      */
-    public function redirectFlash($url, string $key, $value)
+    public function redirectFlash($url, string $key, $value): Response
     {
         session()->setFlash($key, $value);
 
@@ -43,7 +43,7 @@ abstract class Controller extends BaseController
      *
      * @return Response
      */
-    public function redirectQuery($url)
+    public function redirectQuery($url): Response
     {
         $currentParams = request()->get();
 

@@ -18,7 +18,7 @@ class Route
      *
      * @return RouterRule
      */
-    private static function buildRule(string $method, string $url, string $action)
+    private static function buildRule(string $method, string $url, string $action): RouterRule
     {
         $config = [
             'pattern' => $url,
@@ -40,7 +40,7 @@ class Route
      *
      * @return RouterGroupRule
      */
-    public static function group(string $urlPrefix, string $routePrefix = null)
+    public static function group(string $urlPrefix, string $routePrefix = null): RouterGroupRule
     {
         return new RouterGroupRule([
             'prefix' => $urlPrefix,
@@ -56,7 +56,7 @@ class Route
      *
      * @return ResourceRule
      */
-    public static function resource(string $controller, bool $pluralize = true)
+    public static function resource(string $controller, bool $pluralize = true): ResourceRule
     {
         return new ResourceRule([
             'controller' => $controller,
@@ -72,7 +72,7 @@ class Route
      *
      * @return RouterRule
      */
-    public static function get(string $route, string $action)
+    public static function get(string $route, string $action): RouterRule
     {
         return self::buildRule('get', $route, $action);
     }
@@ -85,7 +85,7 @@ class Route
      *
      * @return RouterRule
      */
-    public static function post(string $route, string $action)
+    public static function post(string $route, string $action): RouterRule
     {
         return self::buildRule('post', $route, $action);
     }
@@ -98,7 +98,7 @@ class Route
      *
      * @return RouterRule
      */
-    public static function put(string $route, string $action)
+    public static function put(string $route, string $action): RouterRule
     {
         return self::buildRule('put', $route, $action);
     }
@@ -111,7 +111,7 @@ class Route
      *
      * @return RouterRule
      */
-    public static function patch(string $route, string $action)
+    public static function patch(string $route, string $action): RouterRule
     {
         return self::buildRule('patch', $route, $action);
     }
@@ -124,7 +124,7 @@ class Route
      *
      * @return RouterRule
      */
-    public static function delete(string $route, string $action)
+    public static function delete(string $route, string $action): RouterRule
     {
         return self::buildRule('delete', $route, $action);
     }
@@ -137,7 +137,7 @@ class Route
      *
      * @return RouterRule
      */
-    public static function any(string $route, string $action)
+    public static function any(string $route, string $action): RouterRule
     {
         return self::buildRule(false, $route, $action);
     }
@@ -151,7 +151,7 @@ class Route
      *
      * @return RouterRule
      */
-    public static function matches(array $methods, string $route, string $action)
+    public static function matches(array $methods, string $route, string $action): RouterRule
     {
         $methods = implode(',', $methods);
 

@@ -8,13 +8,15 @@
 namespace manchenkov\yii\database;
 
 use manchenkov\yii\components\Printable;
-use yii\db\ActiveRecord as AR;
+use manchenkov\yii\database\contracts\ActiveCollectionInterface;
+use manchenkov\yii\database\contracts\ActiveRecordInterface;
+use yii\db\ActiveRecord as BaseActiveRecord;
 use yii\web\NotFoundHttpException;
 
 /**
  * Custom application ActiveRecord class wrapper with additional methods
  */
-class ActiveRecord extends AR
+class ActiveRecord extends BaseActiveRecord implements ActiveRecordInterface
 {
     use Printable;
 
@@ -23,9 +25,9 @@ class ActiveRecord extends AR
      *
      * @param array $items
      *
-     * @return ActiveCollection
+     * @return ActiveCollectionInterface
      */
-    public static function collection(array $items)
+    public static function collection(array $items): ActiveCollectionInterface
     {
         return new ActiveCollection($items, static::class);
     }
@@ -38,7 +40,7 @@ class ActiveRecord extends AR
      * @return ActiveRecord|null
      * @throws NotFoundHttpException
      */
-    public static function findOrFail($condition)
+    public static function findOrFail($condition): ?ActiveRecord
     {
         return static::find()->where($condition)->oneOrFail();
     }
@@ -49,19 +51,9 @@ class ActiveRecord extends AR
      */
     public static function find()
     {
-        $query = new ActiveQuery(static::class);
-
-        return $query;
+        return new ActiveQuery(static::class);
     }
 
-    /**
-     * ActiveRecord `hasOne` method with automatic resolve columns names
-     *
-     * @param $class
-     * @param array $link
-     *
-     * @return ActiveQuery|\yii\db\ActiveQuery
-     */
     public function hasOne($class, $link = [])
     {
         /** @var $class ActiveRecord */
@@ -75,14 +67,6 @@ class ActiveRecord extends AR
         return parent::hasOne($class, $link);
     }
 
-    /**
-     * ActiveRecord `hasMany` method with automatic resolve columns names
-     *
-     * @param $class
-     * @param array $link
-     *
-     * @return ActiveQuery|\yii\db\ActiveQuery
-     */
     public function hasMany($class, $link = [])
     {
         /** @var $class ActiveRecord */
@@ -96,14 +80,6 @@ class ActiveRecord extends AR
         return parent::hasMany($class, $link);
     }
 
-    /**
-     * ActiveRecord `hasOne` reverse-method
-     *
-     * @param $class
-     * @param array $link
-     *
-     * @return ActiveQuery|\yii\db\ActiveQuery
-     */
     public function belongsTo($class, $link = [])
     {
         /** @var $class ActiveRecord */

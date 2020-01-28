@@ -2,10 +2,10 @@
 /**
  * Created by Artyom Manchenkov
  * artyom@manchenkoff.me
- * manchenkoff.me © 2019
+ * manchenkoff.me © 2020
  */
 
-namespace manchenkov\yii\collections;
+namespace manchenkov\yii\collections\contracts;
 
 /**
  * CollectionInterface to implement BaseCollection class
@@ -45,7 +45,7 @@ interface CollectionInterface
      *
      * @return array
      */
-    function attribute(string $attributeName);
+    function attribute(string $attributeName): array;
 
     /**
      * Returns a string with imploded collection items by attribute
@@ -55,7 +55,7 @@ interface CollectionInterface
      *
      * @return string
      */
-    function implode(string $attribute, string $delimiter = ',');
+    function implode(string $attribute, string $delimiter = ','): string;
 
     /**
      * Calculates the sum of each item attribute
@@ -70,7 +70,7 @@ interface CollectionInterface
      * Returns a simple PHP array
      * @return array
      */
-    function all();
+    function all(): array;
 
     /**
      * Resets an array values to empty
@@ -126,7 +126,7 @@ interface CollectionInterface
      *
      * @return array
      */
-    function map(callable $callback);
+    function map(callable $callback): array;
 
     /**
      * Find item with specified `attribute => value` in the collection
@@ -136,7 +136,7 @@ interface CollectionInterface
      *
      * @return int
      */
-    function find(string $attribute, $value);
+    function find(string $attribute, $value): int;
 
     /**
      * Checks if an item is exists in the collection
@@ -145,7 +145,7 @@ interface CollectionInterface
      *
      * @return bool
      */
-    function contains($element);
+    function contains($element): bool;
 
     /**
      * Split a collection into array chunks
@@ -155,7 +155,7 @@ interface CollectionInterface
      *
      * @return array
      */
-    function split(int $size, bool $preserveKeys);
+    function split(int $size, bool $preserveKeys): array;
 
     /**
      * Checks if item exists by callback filter function
@@ -164,5 +164,5 @@ interface CollectionInterface
      *
      * @return bool
      */
-    function exists(callable $callback);
+    function exists(callable $callback): bool;
 }

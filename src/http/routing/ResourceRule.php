@@ -60,7 +60,7 @@ class ResourceRule extends CompositeUrlRule
     /**
      * Overrides parent action
      */
-    public function init()
+    public function init(): void
     {
         $this->rules = [];
     }
@@ -69,7 +69,7 @@ class ResourceRule extends CompositeUrlRule
      * Defaults resource controller routes
      * @return array
      */
-    protected function resourceRules()
+    protected function resourceRules(): array
     {
         if (is_null($this->token)) {
             $this->token = $this->controller;
@@ -96,7 +96,7 @@ class ResourceRule extends CompositeUrlRule
      * Builds all of the resource controller routes
      * @throws InvalidConfigException
      */
-    public function build()
+    public function build(): void
     {
         $this->rules = array_merge(
             $this->resourceRules(),
@@ -111,7 +111,7 @@ class ResourceRule extends CompositeUrlRule
      *
      * @throws InvalidConfigException
      */
-    protected function createRules()
+    protected function createRules(): void
     {
         // build full controller URL prefix
         $normalizedPrefix = $this->pluralize
@@ -145,7 +145,7 @@ class ResourceRule extends CompositeUrlRule
      *
      * @param string $name
      *
-     * @return $this
+     * @return static
      */
     public function token(string $name)
     {
@@ -159,7 +159,7 @@ class ResourceRule extends CompositeUrlRule
      *
      * @param string $urlPrefix
      *
-     * @return $this
+     * @return static
      */
     public function prefix(string $urlPrefix)
     {
@@ -173,7 +173,7 @@ class ResourceRule extends CompositeUrlRule
      *
      * @param RouterRule[] $rules
      *
-     * @return $this
+     * @return static
      */
     public function extra(array $rules)
     {

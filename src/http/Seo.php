@@ -62,7 +62,7 @@ class Seo extends BaseObject
     /**
      * Register all of the tags from configuration
      */
-    private function registerData()
+    private function registerData(): void
     {
         $this->links[] = [
             'rel' => 'canonical',
@@ -87,7 +87,13 @@ class Seo extends BaseObject
      * @param bool $useOpenGraph
      * @param string|null $image
      */
-    public function registerPage(string $title, string $description, string $keywords, bool $useOpenGraph = false, string $image = null)
+    public function registerPage(
+        string $title,
+        string $description,
+        string $keywords,
+        bool $useOpenGraph = false,
+        string $image = null
+    ): void
     {
         $this->title = $title;
 
@@ -119,7 +125,11 @@ class Seo extends BaseObject
      * @param string|null $description
      * @param string|null $image
      */
-    public function registerOpenGraph(string $title = null, string $description = null, string $image = null)
+    public function registerOpenGraph(
+        string $title = null,
+        string $description = null,
+        string $image = null
+    ): void
     {
         $params = [
             'og:url' => url(request()->url, true),
@@ -143,9 +153,9 @@ class Seo extends BaseObject
      *
      * @param string $key
      *
-     * @return null
+     * @return string|null
      */
-    public function get(string $key)
+    public function get(string $key): ?string
     {
         $value = null;
 
@@ -176,7 +186,7 @@ class Seo extends BaseObject
      *
      * @param array $config
      */
-    protected function setConfig(array $config)
+    protected function setConfig(array $config): void
     {
         $this->_name = $config['name'];
         $this->meta = $config['meta'];
@@ -188,7 +198,7 @@ class Seo extends BaseObject
      * Returns title of the current View
      * @return string
      */
-    protected function getTitle()
+    protected function getTitle(): string
     {
         return $this->_view->title;
     }
@@ -198,7 +208,7 @@ class Seo extends BaseObject
      *
      * @param string $value
      */
-    protected function setTitle(string $value)
+    protected function setTitle(string $value): void
     {
         $this->_view->title = ($this->_name) ? "{$value} | {$this->_name}" : $value;
     }
@@ -207,7 +217,7 @@ class Seo extends BaseObject
      * Returns website name
      * @return string
      */
-    protected function getName()
+    protected function getName(): string
     {
         return $this->_name;
     }
@@ -216,7 +226,7 @@ class Seo extends BaseObject
      * Returns website logo
      * @return string
      */
-    protected function getLogo()
+    protected function getLogo(): string
     {
         return $this->_logo;
     }

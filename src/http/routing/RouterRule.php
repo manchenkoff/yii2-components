@@ -57,7 +57,7 @@ class RouterRule extends UrlRule
     /**
      * Void overriding
      */
-    public function init()
+    public function init(): void
     {
         return;
     }
@@ -66,7 +66,7 @@ class RouterRule extends UrlRule
      * Registers route
      * @throws InvalidConfigException
      */
-    public function build()
+    public function build(): void
     {
         if (!empty($this->prefix)) {
             $this->route = "{$this->prefix}/{$this->route}";
@@ -84,7 +84,7 @@ class RouterRule extends UrlRule
      *
      * @param string $value
      *
-     * @return $this
+     * @return static
      */
     public function name(string $value)
     {
@@ -98,7 +98,7 @@ class RouterRule extends UrlRule
      *
      * @param string $value
      *
-     * @return $this
+     * @return static
      */
     public function suffix(string $value)
     {
@@ -112,7 +112,7 @@ class RouterRule extends UrlRule
      *
      * @param array $context
      *
-     * @return $this
+     * @return static
      */
     public function defaults(array $context = [])
     {

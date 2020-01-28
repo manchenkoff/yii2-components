@@ -40,7 +40,7 @@ class RouterGroupRule extends GroupUrlRule
      * Builds group rules
      * @throws InvalidConfigException
      */
-    public function build()
+    public function build(): void
     {
         foreach ($this->rules as $rule) {
             /** @var $rule RouterRule */
@@ -56,7 +56,7 @@ class RouterGroupRule extends GroupUrlRule
      *
      * @param string $value
      *
-     * @return $this
+     * @return static
      */
     public function suffix(string $value)
     {
@@ -70,7 +70,7 @@ class RouterGroupRule extends GroupUrlRule
      *
      * @param array $rules
      *
-     * @return $this
+     * @return static
      */
     public function routes(array $rules)
     {

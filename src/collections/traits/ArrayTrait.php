@@ -33,7 +33,7 @@ trait ArrayTrait
      *
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->elements[$offset]);
     }
@@ -75,7 +75,7 @@ trait ArrayTrait
      * Count elements of an object
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->elements);
     }
@@ -84,7 +84,7 @@ trait ArrayTrait
      * Checks if array is empty
      * @return bool
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return $this->count() > 0;
     }
@@ -93,7 +93,7 @@ trait ArrayTrait
      * Checks if array is not empty
      * @return bool
      */
-    public function isNotEmpty()
+    public function isNotEmpty(): bool
     {
         return !$this->isEmpty();
     }

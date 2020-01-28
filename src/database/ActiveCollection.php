@@ -7,16 +7,11 @@
 
 namespace manchenkov\yii\database;
 
-use manchenkov\yii\collections\BaseCollection;
 use InvalidArgumentException;
-use yii\base\InvalidConfigException;
-use yii\base\NotSupportedException;
-use yii\db\Exception;
+use manchenkov\yii\collections\BaseCollection;
+use manchenkov\yii\database\contracts\ActiveCollectionInterface;
 
-/**
- * ActiveCollection component to work with strict type set of items
- */
-class ActiveCollection extends BaseCollection
+class ActiveCollection extends BaseCollection implements ActiveCollectionInterface
 {
     /**
      * @param $element
@@ -45,11 +40,6 @@ class ActiveCollection extends BaseCollection
         $this->elements = $elements;
     }
 
-    /**
-     * @param $element
-     *
-     * @return $this
-     */
     public function add($element)
     {
         $this->checkElementType($element);
@@ -59,11 +49,6 @@ class ActiveCollection extends BaseCollection
         return $this;
     }
 
-    /**
-     * @param int $index
-     *
-     * @return $this
-     */
     public function remove(int $index)
     {
         $this->offsetUnset($index);
@@ -71,12 +56,7 @@ class ActiveCollection extends BaseCollection
         return $this;
     }
 
-    /**
-     * @param string $attributeName
-     *
-     * @return array
-     */
-    public function attribute(string $attributeName)
+    public function attribute(string $attributeName): array
     {
         return $this->map(
             function ($item) use ($attributeName) {
@@ -85,22 +65,11 @@ class ActiveCollection extends BaseCollection
         );
     }
 
-    /**
-     * @param string $attribute
-     * @param string $delimiter
-     *
-     * @return string
-     */
-    public function implode(string $attribute, string $delimiter = ',')
+    public function implode(string $attribute, string $delimiter = ','): string
     {
         return implode($delimiter, $this->attribute($attribute));
     }
 
-    /**
-     * @param string $attributeName
-     *
-     * @return mixed
-     */
     public function sum(string $attributeName)
     {
         return array_reduce(
@@ -112,17 +81,11 @@ class ActiveCollection extends BaseCollection
         );
     }
 
-    /**
-     * @return array
-     */
-    public function all()
+    public function all(): array
     {
         return $this->elements;
     }
 
-    /**
-     * @return $this
-     */
     public function clear()
     {
         $this->elements = [];
@@ -130,11 +93,6 @@ class ActiveCollection extends BaseCollection
         return $this;
     }
 
-    /**
-     * @param callable $callback
-     *
-     * @return ActiveCollection
-     */
     public function filter(callable $callback)
     {
         return new static(
@@ -146,9 +104,6 @@ class ActiveCollection extends BaseCollection
         );
     }
 
-    /**
-     * @return $this
-     */
     public function reverse()
     {
         $this->elements = array_reverse($this->elements);
@@ -156,9 +111,6 @@ class ActiveCollection extends BaseCollection
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function shuffle()
     {
         shuffle($this->elements);
@@ -166,13 +118,6 @@ class ActiveCollection extends BaseCollection
         return $this;
     }
 
-    /**
-     * @param $offset
-     * @param null $length
-     * @param bool $preserveKeys
-     *
-     * @return ActiveCollection
-     */
     public function slice($offset, $length = null, $preserveKeys = false)
     {
         return new static(
@@ -186,11 +131,6 @@ class ActiveCollection extends BaseCollection
         );
     }
 
-    /**
-     * @param callable $callback
-     *
-     * @return $this|mixed
-     */
     public function walk(callable $callback)
     {
         array_walk($this->elements, $callback);
@@ -198,12 +138,7 @@ class ActiveCollection extends BaseCollection
         return $this;
     }
 
-    /**
-     * @param callable $callback
-     *
-     * @return array
-     */
-    public function map(callable $callback)
+    public function map(callable $callback): array
     {
         return array_map(
             $callback,
@@ -211,13 +146,7 @@ class ActiveCollection extends BaseCollection
         );
     }
 
-    /**
-     * @param string $attribute
-     * @param $value
-     *
-     * @return int
-     */
-    public function find(string $attribute, $value)
+    public function find(string $attribute, $value): int
     {
         $index = -1;
 
@@ -231,33 +160,17 @@ class ActiveCollection extends BaseCollection
         return $index;
     }
 
-    /**
-     * @param $element
-     *
-     * @return bool
-     */
-    public function contains($element)
+    public function contains($element): bool
     {
         return in_array($element, $this->elements, true);
     }
 
-    /**
-     * @param int $size
-     * @param bool $preserveKeys
-     *
-     * @return array|mixed
-     */
-    public function split(int $size, bool $preserveKeys)
+    public function split(int $size, bool $preserveKeys): array
     {
         return array_chunk($this->elements, $size, $preserveKeys);
     }
 
-    /**
-     * @param callable $callback
-     *
-     * @return bool
-     */
-    public function exists(callable $callback)
+    public function exists(callable $callback): bool
     {
         $isExists = false;
 
@@ -271,13 +184,7 @@ class ActiveCollection extends BaseCollection
         return $isExists;
     }
 
-    /**
-     * @return bool
-     * @throws InvalidConfigException
-     * @throws NotSupportedException
-     * @throws Exception
-     */
-    public function save()
+    public function save(): bool
     {
         $completed = true;
 
@@ -299,13 +206,7 @@ class ActiveCollection extends BaseCollection
         return $completed;
     }
 
-    /**
-     * @return bool
-     * @throws InvalidConfigException
-     * @throws NotSupportedException
-     * @throws Exception
-     */
-    public function delete()
+    public function delete(): bool
     {
         $completed = true;
 
@@ -327,10 +228,7 @@ class ActiveCollection extends BaseCollection
         return $completed;
     }
 
-    /**
-     * @return bool
-     */
-    public function validate()
+    public function validate(): bool
     {
         $completed = true;
 
@@ -344,10 +242,7 @@ class ActiveCollection extends BaseCollection
         return $completed;
     }
 
-    /**
-     * @return array
-     */
-    public function errors()
+    public function errors(): array
     {
         $errors = [];
 

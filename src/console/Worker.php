@@ -7,6 +7,7 @@
 
 namespace manchenkov\yii\console;
 
+use manchenkov\yii\console\contracts\WorkerInterface;
 use yii\base\InvalidConfigException;
 
 /**
@@ -14,7 +15,7 @@ use yii\base\InvalidConfigException;
  *
  * @property string $waitingTime
  */
-abstract class Worker extends Command
+abstract class Worker extends Command implements WorkerInterface
 {
     /**
      * @var string Default controller action name
@@ -31,7 +32,7 @@ abstract class Worker extends Command
      */
     protected $sleepTime = 30;
 
-    public function actionRun()
+    public function actionRun(): void
     {
         // handle OS signals
         pcntl_signal(SIGQUIT, [$this, 'signalHandler']);
@@ -57,7 +58,7 @@ abstract class Worker extends Command
     /**
      * Stop worker by OS signal
      */
-    private function stop()
+    private function stop(): void
     {
         $this->warning('Stopping worker ...');
         $this->canWork = false;
@@ -67,7 +68,7 @@ abstract class Worker extends Command
     /**
      * OS signal callback function
      */
-    private function signalHandler()
+    private function signalHandler(): void
     {
         $this->stop();
         $this->success('Worker has stopped');
@@ -79,7 +80,7 @@ abstract class Worker extends Command
      * @return string
      * @throws InvalidConfigException
      */
-    public function getWaitingTime()
+    public function getWaitingTime(): string
     {
         return app()->formatter->asTime($this->sleepTime);
     }
@@ -87,20 +88,20 @@ abstract class Worker extends Command
     /**
      * Executes before each handle action
      */
-    protected function beforeHandle() { }
+    protected function beforeHandle(): void { }
 
     /**
      * Executes after each handle action
      */
-    protected function afterHandle() { }
+    protected function afterHandle(): void { }
 
     /**
      * Executes when the worker has stopped
      */
-    protected function onStopped() { }
+    protected function onStopped(): void { }
 
     /**
      * @return mixed
      */
-    abstract protected function handle();
+    abstract protected function handle(): void;
 }

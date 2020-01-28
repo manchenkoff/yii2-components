@@ -20,9 +20,9 @@ trait Middleware
 {
     /**
      * Basic behaviors: TokenAuth (Query, Bearer), AccessControl
-     * @return mixed
+     * @return array
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         $behaviors = parent::behaviors();
 
@@ -66,13 +66,13 @@ trait Middleware
      * ];
      * ```
      */
-    abstract protected function accessRules();
+    abstract protected function accessRules(): array;
 
     /**
      * Array of actions without authentication
      * @return array
      */
-    protected function publicActions()
+    protected function publicActions(): array
     {
         return [];
     }

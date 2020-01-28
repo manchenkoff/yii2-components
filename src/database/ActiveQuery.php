@@ -7,7 +7,8 @@
 
 namespace manchenkov\yii\database;
 
-use yii\db\ActiveQuery as AQ;
+use manchenkov\yii\database\contracts\ActiveQueryInterface;
+use yii\db\ActiveQuery as BaseActiveQuery;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -15,41 +16,22 @@ use yii\web\NotFoundHttpException;
  *
  * Supports JSON columns search
  *
+ * @method ActiveQueryInterface one($db = null)
+ * 
  * @see ActiveRecord
  */
-class ActiveQuery extends AQ
+class ActiveQuery extends BaseActiveQuery implements ActiveQueryInterface
 {
-    /**
-     * Gets IDs of result records
-     *
-     * @param string $column
-     *
-     * @return array
-     */
-    public function ids(string $column = 'id')
+    public function ids(string $column = 'id'): array
     {
         return $this->select($column)->column();
     }
 
-    /**
-     * Filter by ID column
-     *
-     * @param int $id
-     *
-     * @param string $column
-     *
-     * @return ActiveQuery
-     */
     public function byID(int $id, string $column = 'id')
     {
         return $this->andWhere([$column => $id]);
     }
 
-    /**
-     * Throws NotFound error if no such model were found
-     * @return array|null|ActiveRecord
-     * @throws NotFoundHttpException
-     */
     public function oneOrFail()
     {
         $model = $this->one();
@@ -61,33 +43,11 @@ class ActiveQuery extends AQ
         }
     }
 
-    /**
-     * Checks if JSON key contains in a column value
-     *
-     * Usage: $query->jsonKeyExists('table_column.some.json.key')
-     *
-     * @param $key
-     *
-     * @return ActiveQuery
-     */
     public function jsonKeyExists(string $key)
     {
         return $this->jsonWhere($key, 'NULL', 'IS NOT');
     }
 
-    /**
-     * Search method for JSON columns
-     *
-     * Usage:
-     *  $query->jsonWhere('table_column.some.json.key', 'equals_value')
-     *  $query->jsonWhere('table_column.some.json.key', 'lower_value', '>')
-     *
-     * @param string $key
-     * @param $value
-     * @param string $operator
-     *
-     * @return ActiveQuery
-     */
     public function jsonWhere(string $key, $value, string $operator = '=')
     {
         $keys = explode('.', $key);
@@ -116,13 +76,6 @@ class ActiveQuery extends AQ
         return $this->andWhere($expression);
     }
 
-    /**
-     * Returns result of a query set
-     *
-     * @param null $db
-     *
-     * @return ActiveCollection|array|\yii\db\ActiveRecord[]|ActiveRecord[]
-     */
     public function all($db = null)
     {
         $data = parent::all($db);
@@ -135,49 +88,21 @@ class ActiveQuery extends AQ
             : $activeRecordClass::collection($data);
     }
 
-    /**
-     * Returns the first record sorted by column name
-     *
-     * @param string $column
-     *
-     * @return array|\yii\db\ActiveRecord|ActiveRecord|null
-     */
     public function first(string $column = 'created_at')
     {
         return $this->orderBy($column . ' asc')->one();
     }
 
-    /**
-     * Returns the last record sorted by column name
-     *
-     * @param string $column
-     *
-     * @return array|\yii\db\ActiveRecord|ActiveRecord|null
-     */
     public function last(string $column = 'created_at')
     {
         return $this->orderBy($column . ' desc')->one();
     }
 
-    /**
-     * Returns the last record sorted by column name
-     *
-     * @param string $column
-     *
-     * @return array|\yii\db\ActiveRecord|ActiveRecord|null
-     */
     public function newest(string $column = 'created_at')
     {
         return $this->last($column);
     }
 
-    /**
-     * Returns the first record sorted by column name
-     *
-     * @param string $column
-     *
-     * @return array|\yii\db\ActiveRecord|ActiveRecord|null
-     */
     public function oldest(string $column = 'created_at')
     {
         return $this->first($column);

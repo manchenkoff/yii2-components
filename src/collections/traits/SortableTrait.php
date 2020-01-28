@@ -21,7 +21,7 @@ trait SortableTrait
      * @param string $attribute
      * @param int $sortType
      *
-     * @return $this
+     * @return static
      */
     public function sortBy(string $attribute, $sortType = SORT_ASC)
     {
@@ -61,7 +61,7 @@ trait SortableTrait
      *
      * @return array
      */
-    public function groupBy(string $attribute)
+    public function groupBy(string $attribute): array
     {
         $items = [];
 

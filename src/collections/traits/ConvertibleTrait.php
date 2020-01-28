@@ -22,7 +22,7 @@ trait ConvertibleTrait
      *
      * @return array
      */
-    public function toArray(array $fields = [])
+    public function toArray(array $fields = []): array
     {
         $result = [];
 
@@ -42,7 +42,7 @@ trait ConvertibleTrait
      *
      * @return string The JSON string representation of array
      */
-    public function toJson(array $fields = [], $options = 0)
+    public function toJson(array $fields = [], $options = 0): string
     {
         $items = $this->toArray($fields);
 

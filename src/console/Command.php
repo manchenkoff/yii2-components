@@ -8,6 +8,7 @@
 namespace manchenkov\yii\console;
 
 use Exception;
+use manchenkov\yii\console\contracts\CommandInterface;
 use ReflectionException;
 use ReflectionMethod;
 use Yii;
@@ -19,7 +20,7 @@ use yii\helpers\Console;
 /**
  * Console controller base class with a few helper methods and DI in actions
  */
-abstract class Command extends BaseController
+abstract class Command extends BaseController implements CommandInterface
 {
     /**
      * @var bool Use terminal colors if supports
@@ -40,47 +41,27 @@ abstract class Command extends BaseController
      * @param string $message
      * @param int $color
      */
-    private function coloredMessage(string $message, int $color)
+    private function coloredMessage(string $message, int $color): void
     {
         $this->stdout($message . PHP_EOL, $color);
     }
 
-    /**
-     * Shows message with Console::FG_GREEN color
-     *
-     * @param string $message
-     */
-    public function success(string $message)
+    public function success(string $message): void
     {
         $this->coloredMessage($message, self::COLOR_SUCCESS);
     }
 
-    /**
-     * Shows message with Console::FG_BLUE color
-     *
-     * @param string $message
-     */
-    public function info(string $message)
+    public function info(string $message): void
     {
         $this->coloredMessage($message, self::COLOR_INFO);
     }
 
-    /**
-     * Shows message with Console::FG_RED color
-     *
-     * @param string $message
-     */
-    public function error(string $message)
+    public function error(string $message): void
     {
         $this->coloredMessage($message, self::COLOR_ERROR);
     }
 
-    /**
-     * Shows message with Console::FG_YELLOW color
-     *
-     * @param string $message
-     */
-    public function warning(string $message)
+    public function warning(string $message): void
     {
         $this->coloredMessage($message, self::COLOR_WARNING);
     }
@@ -93,7 +74,7 @@ abstract class Command extends BaseController
      * @throws ReflectionException
      * @throws Exception
      */
-    public function bindActionParams($action, $params)
+    public function bindActionParams($action, $params): array
     {
         // make callable items for resolving
         if ($action instanceof InlineAction) {

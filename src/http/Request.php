@@ -49,10 +49,10 @@ class Request extends BaseRequest
     /**
      * Requested URL processing
      *
-     * @return bool|string
+     * @return string
      * @throws InvalidConfigException
      */
-    protected function resolveRequestUri()
+    protected function resolveRequestUri(): string
     {
         $result = parent::resolveRequestUri();
 
@@ -66,7 +66,7 @@ class Request extends BaseRequest
      *
      * @return string
      */
-    private function setLanguageFromUrl(string $url)
+    private function setLanguageFromUrl(string $url): string
     {
         $cookieLanguage = $this->cookies[$this->languageCookieName];
 

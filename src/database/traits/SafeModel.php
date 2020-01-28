@@ -19,7 +19,7 @@ trait SafeModel
     /**
      * @inheritDoc
      */
-    public function formName()
+    public function formName(): string
     {
         return '';
     }
