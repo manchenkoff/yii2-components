@@ -9,14 +9,15 @@ declare(strict_types=1);
 
 namespace manchenkov\yii\data;
 
-use manchenkov\yii\data\contracts\FormInterface;
 use yii\base\Model;
 
-abstract class Form extends Model implements FormInterface
+abstract class Form extends Model
 {
-    public function obtain(array $data): bool
+    public function load($data, $formName = null): bool
     {
-        if ($this->load($data)) {
+        $loaded = parent::load($data, $formName);
+
+        if ($loaded) {
             return $this->validate();
         }
 
