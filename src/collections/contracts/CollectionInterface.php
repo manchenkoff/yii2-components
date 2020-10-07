@@ -5,6 +5,8 @@
  * manchenkoff.me © 2020
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\collections\contracts;
 
 /**
@@ -27,7 +29,7 @@ interface CollectionInterface
      *
      * @return static
      */
-    function add($element);
+    function add($element): CollectionInterface;
 
     /**
      * Removes an item by index
@@ -36,7 +38,7 @@ interface CollectionInterface
      *
      * @return static
      */
-    function remove(int $index);
+    function remove(int $index): CollectionInterface;
 
     /**
      * Gets attribute values of each item
@@ -76,7 +78,7 @@ interface CollectionInterface
      * Resets an array values to empty
      * @return static
      */
-    function clear();
+    function clear(): CollectionInterface;
 
     /**
      * Applies a callback function to filter current collection
@@ -91,13 +93,13 @@ interface CollectionInterface
      * Changes a collection order
      * @return static
      */
-    function reverse();
+    function reverse(): CollectionInterface;
 
     /**
      * Shuffle an array
      * @return static
      */
-    function shuffle();
+    function shuffle(): CollectionInterface;
 
     /**
      * Get the slice of array values
@@ -117,7 +119,7 @@ interface CollectionInterface
      *
      * @return static
      */
-    function walk(callable $callback);
+    function walk(callable $callback): CollectionInterface;
 
     /**
      * Returns an array with results of callback function on each collection item

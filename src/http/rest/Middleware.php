@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\http\rest;
 
 use yii\filters\AccessControl;
@@ -52,6 +54,15 @@ trait Middleware
     }
 
     /**
+     * Array of actions without authentication
+     * @return array
+     */
+    protected function publicActions(): array
+    {
+        return [];
+    }
+
+    /**
      * AccessControl rules
      * @return array
      *
@@ -67,13 +78,4 @@ trait Middleware
      * ```
      */
     abstract protected function accessRules(): array;
-
-    /**
-     * Array of actions without authentication
-     * @return array
-     */
-    protected function publicActions(): array
-    {
-        return [];
-    }
 }

@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\http\routing;
 
 use yii\base\InvalidConfigException;
@@ -46,7 +48,7 @@ class RouteManager extends UrlManager
      * Directory with routes configuration files
      * @var string
      */
-    public $routesDirectory;
+    public string $routesDirectory;
 
     /**
      * Router configuration files loading
@@ -78,10 +80,13 @@ class RouteManager extends UrlManager
 
         // save the rules to the current router array
         $this->addRules(
-            // ignore incorrect values
-            array_filter($rules, function ($ruleItem) {
-                return $ruleItem instanceof UrlRuleInterface;
-            })
+        // ignore incorrect values
+            array_filter(
+                $rules,
+                static function ($ruleItem): bool {
+                    return $ruleItem instanceof UrlRuleInterface;
+                }
+            )
         );
 
         // build each rules config
@@ -91,6 +96,6 @@ class RouteManager extends UrlManager
         }
 
         // initialize router component
-        return parent::init();
+        parent::init();
     }
 }

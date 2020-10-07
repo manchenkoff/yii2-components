@@ -5,13 +5,19 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\database\traits;
+
+use manchenkov\yii\database\ActiveRecord;
 
 /**
  * Trait SoftDelete for safe deleting model records (deleted_at timestamp)
  *
  * @property int $deleted_at
  * @property-read bool $isDeleted
+ *
+ * @mixin ActiveRecord
  */
 trait SoftDelete
 {

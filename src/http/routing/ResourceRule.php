@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\http\routing;
 
 use yii\base\InvalidConfigException;
@@ -30,32 +32,32 @@ class ResourceRule extends CompositeUrlRule
      * Resource controller name/id
      * @var string
      */
-    public $controller;
+    public string $controller;
 
     /**
      * Enables an inflection on a controller name in the URL
      * @var bool
      */
-    public $pluralize;
+    public bool $pluralize;
 
     /**
      * Controller key to search models
      * Default value is resource controller name: `$this->controller`
      * @var string
      */
-    protected $token;
+    protected string $token;
 
     /**
      * URL prefix
      * @var string
      */
-    protected $prefix;
+    protected string $prefix;
 
     /**
      * Additional rules for resource controller (without controller name)
      * @var RouterRule[]
      */
-    protected $extraRules = [];
+    protected array $extraRules = [];
 
     /**
      * Overrides parent action
@@ -63,6 +65,20 @@ class ResourceRule extends CompositeUrlRule
     public function init(): void
     {
         $this->rules = [];
+    }
+
+    /**
+     * Builds all of the resource controller routes
+     * @throws InvalidConfigException
+     */
+    public function build(): void
+    {
+        $this->rules = array_merge(
+            $this->resourceRules(),
+            $this->extraRules
+        );
+
+        $this->createRules();
     }
 
     /**
@@ -90,20 +106,6 @@ class ResourceRule extends CompositeUrlRule
             // DELETE controller/<id> => controller/delete
             Route::delete("<{$this->token}>", "delete"),
         ];
-    }
-
-    /**
-     * Builds all of the resource controller routes
-     * @throws InvalidConfigException
-     */
-    public function build(): void
-    {
-        $this->rules = array_merge(
-            $this->resourceRules(),
-            $this->extraRules
-        );
-
-        $this->createRules();
     }
 
     /**
@@ -147,7 +149,7 @@ class ResourceRule extends CompositeUrlRule
      *
      * @return static
      */
-    public function token(string $name)
+    public function token(string $name): ResourceRule
     {
         $this->token = $name;
 
@@ -161,7 +163,7 @@ class ResourceRule extends CompositeUrlRule
      *
      * @return static
      */
-    public function prefix(string $urlPrefix)
+    public function prefix(string $urlPrefix): ResourceRule
     {
         $this->prefix = $urlPrefix;
 
@@ -175,7 +177,7 @@ class ResourceRule extends CompositeUrlRule
      *
      * @return static
      */
-    public function extra(array $rules)
+    public function extra(array $rules): ResourceRule
     {
         $this->extraRules = $rules;
 

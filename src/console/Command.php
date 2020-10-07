@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\console;
 
 use Exception;
@@ -12,8 +14,8 @@ use manchenkov\yii\console\contracts\CommandInterface;
 use ReflectionException;
 use ReflectionMethod;
 use Yii;
-use yii\base\Action;
 use yii\base\InlineAction;
+use yii\base\InvalidConfigException;
 use yii\console\Controller as BaseController;
 use yii\helpers\Console;
 
@@ -23,17 +25,21 @@ use yii\helpers\Console;
 abstract class Command extends BaseController implements CommandInterface
 {
     /**
-     * @var bool Use terminal colors if supports
-     */
-    public $color = true;
-
-    /**
      * Color constants
      */
     const COLOR_SUCCESS = Console::FG_GREEN;
     const COLOR_INFO = Console::FG_BLUE;
     const COLOR_ERROR = Console::FG_RED;
     const COLOR_WARNING = Console::FG_YELLOW;
+    /**
+     * @var bool Use terminal colors if supports
+     */
+    public $color = true;
+
+    public function success(string $message): void
+    {
+        $this->coloredMessage($message, self::COLOR_SUCCESS);
+    }
 
     /**
      * Print a message with text color
@@ -44,11 +50,6 @@ abstract class Command extends BaseController implements CommandInterface
     private function coloredMessage(string $message, int $color): void
     {
         $this->stdout($message . PHP_EOL, $color);
-    }
-
-    public function success(string $message): void
-    {
-        $this->coloredMessage($message, self::COLOR_SUCCESS);
     }
 
     public function info(string $message): void
@@ -67,11 +68,10 @@ abstract class Command extends BaseController implements CommandInterface
     }
 
     /**
-     * @param Action $action
-     * @param array $params
+     * {@inheritdoc}
      *
-     * @return array
      * @throws ReflectionException
+     * @throws InvalidConfigException
      * @throws Exception
      */
     public function bindActionParams($action, $params): array
@@ -113,9 +113,13 @@ abstract class Command extends BaseController implements CommandInterface
 
         if (!empty($missing)) {
             throw new Exception(
-                t('yii', 'Missing required arguments: {params}', [
-                    'params' => implode(', ', $missing),
-                ])
+                t(
+                    'yii',
+                    'Missing required arguments: {params}',
+                    [
+                        'params' => implode(', ', $missing),
+                    ]
+                )
             );
         }
 

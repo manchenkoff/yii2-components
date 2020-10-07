@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\database;
 
 use InvalidArgumentException;
@@ -13,16 +15,6 @@ use manchenkov\yii\database\contracts\ActiveCollectionInterface;
 
 class ActiveCollection extends BaseCollection implements ActiveCollectionInterface
 {
-    /**
-     * @param $element
-     */
-    private function checkElementType($element)
-    {
-        if (!$element instanceof $this->_itemClass) {
-            throw new InvalidArgumentException("All of the collection items must be an instance of the same class");
-        }
-    }
-
     /**
      * ActiveCollection constructor.
      *
@@ -40,7 +32,17 @@ class ActiveCollection extends BaseCollection implements ActiveCollectionInterfa
         $this->elements = $elements;
     }
 
-    public function add($element)
+    /**
+     * @param $element
+     */
+    private function checkElementType($element)
+    {
+        if (!$element instanceof $this->_itemClass) {
+            throw new InvalidArgumentException("All of the collection items must be an instance of the same class");
+        }
+    }
+
+    public function add($element): ActiveCollection
     {
         $this->checkElementType($element);
 
@@ -49,11 +51,16 @@ class ActiveCollection extends BaseCollection implements ActiveCollectionInterfa
         return $this;
     }
 
-    public function remove(int $index)
+    public function remove(int $index): ActiveCollection
     {
         $this->offsetUnset($index);
 
         return $this;
+    }
+
+    public function implode(string $attribute, string $delimiter = ','): string
+    {
+        return implode($delimiter, $this->attribute($attribute));
     }
 
     public function attribute(string $attributeName): array
@@ -65,9 +72,12 @@ class ActiveCollection extends BaseCollection implements ActiveCollectionInterfa
         );
     }
 
-    public function implode(string $attribute, string $delimiter = ','): string
+    public function map(callable $callback): array
     {
-        return implode($delimiter, $this->attribute($attribute));
+        return array_map(
+            $callback,
+            $this->elements
+        );
     }
 
     public function sum(string $attributeName)
@@ -86,14 +96,14 @@ class ActiveCollection extends BaseCollection implements ActiveCollectionInterfa
         return $this->elements;
     }
 
-    public function clear()
+    public function clear(): ActiveCollection
     {
         $this->elements = [];
 
         return $this;
     }
 
-    public function filter(callable $callback)
+    public function filter(callable $callback): ActiveCollection
     {
         return new static(
             array_filter(
@@ -104,21 +114,21 @@ class ActiveCollection extends BaseCollection implements ActiveCollectionInterfa
         );
     }
 
-    public function reverse()
+    public function reverse(): ActiveCollection
     {
         $this->elements = array_reverse($this->elements);
 
         return $this;
     }
 
-    public function shuffle()
+    public function shuffle(): ActiveCollection
     {
         shuffle($this->elements);
 
         return $this;
     }
 
-    public function slice($offset, $length = null, $preserveKeys = false)
+    public function slice($offset, $length = null, $preserveKeys = false): ActiveCollection
     {
         return new static(
             array_slice(
@@ -131,19 +141,11 @@ class ActiveCollection extends BaseCollection implements ActiveCollectionInterfa
         );
     }
 
-    public function walk(callable $callback)
+    public function walk(callable $callback): ActiveCollection
     {
         array_walk($this->elements, $callback);
 
         return $this;
-    }
-
-    public function map(callable $callback): array
-    {
-        return array_map(
-            $callback,
-            $this->elements
-        );
     }
 
     public function find(string $attribute, $value): int

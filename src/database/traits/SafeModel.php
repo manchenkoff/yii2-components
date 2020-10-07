@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\database\traits;
 
 use yii\base\Model;
@@ -16,9 +18,6 @@ use yii\base\Model;
  */
 trait SafeModel
 {
-    /**
-     * @inheritDoc
-     */
     public function formName(): string
     {
         return '';

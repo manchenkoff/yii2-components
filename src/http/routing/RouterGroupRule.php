@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\http\routing;
 
 use yii\base\InvalidConfigException;
@@ -25,16 +27,16 @@ class RouterGroupRule extends GroupUrlRule
     public $routePrefix;
 
     /**
-     * URL address suffix
-     * @var string
-     */
-    public $suffix;
-
-    /**
      * Rules config array
      * @var array
      */
     public $rules = [];
+
+    /**
+     * URL address suffix
+     * @var string
+     */
+    public string $suffix;
 
     /**
      * Builds group rules
@@ -58,7 +60,7 @@ class RouterGroupRule extends GroupUrlRule
      *
      * @return static
      */
-    public function suffix(string $value)
+    public function suffix(string $value): RouterGroupRule
     {
         $this->suffix = $value;
 
@@ -72,7 +74,7 @@ class RouterGroupRule extends GroupUrlRule
      *
      * @return static
      */
-    public function routes(array $rules)
+    public function routes(array $rules): RouterGroupRule
     {
         $this->rules = $rules;
 

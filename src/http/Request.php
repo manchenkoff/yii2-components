@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\http;
 
 use yii\base\InvalidConfigException;
@@ -32,19 +34,19 @@ class Request extends BaseRequest
      * Language cookie name value
      * @var string
      */
-    public $languageCookieName = '_language';
+    public string $languageCookieName = '_language';
 
     /**
      * Language cookie lifetime string
      * @var string
      */
-    public $languageCookieLifetime = '+1 month';
+    public string $languageCookieLifetime = '+1 month';
 
     /**
      * Supported languages list
      * @var array
      */
-    public $languages = [];
+    public array $languages = [];
 
     /**
      * Requested URL processing
@@ -82,12 +84,14 @@ class Request extends BaseRequest
                 // set browser cookie
                 if ($cookieLanguage != $languagePart) {
                     app()->response->cookies->add(
-                        new Cookie([
-                            'name' => $this->languageCookieName,
-                            'value' => $languagePart,
-                            'secure' => true,
-                            'expire' => strtotime($this->languageCookieLifetime),
-                        ])
+                        new Cookie(
+                            [
+                                'name' => $this->languageCookieName,
+                                'value' => $languagePart,
+                                'secure' => true,
+                                'expire' => strtotime($this->languageCookieLifetime),
+                            ]
+                        )
                     );
                 }
 

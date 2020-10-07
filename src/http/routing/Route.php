@@ -5,33 +5,12 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\http\routing;
 
 class Route
 {
-    /**
-     * Builds a route object
-     *
-     * @param string $method
-     * @param string $url
-     * @param string $action
-     *
-     * @return RouterRule
-     */
-    private static function buildRule(string $method, string $url, string $action): RouterRule
-    {
-        $config = [
-            'pattern' => $url,
-            'route' => $action,
-        ];
-
-        if ($method) {
-            $config['verb'] = [$method];
-        }
-
-        return new RouterRule($config);
-    }
-
     /**
      * Builds a group of routes objects
      *
@@ -42,10 +21,12 @@ class Route
      */
     public static function group(string $urlPrefix, string $routePrefix = null): RouterGroupRule
     {
-        return new RouterGroupRule([
-            'prefix' => $urlPrefix,
-            'routePrefix' => $routePrefix ?? $urlPrefix,
-        ]);
+        return new RouterGroupRule(
+            [
+                'prefix' => $urlPrefix,
+                'routePrefix' => $routePrefix ?? $urlPrefix,
+            ]
+        );
     }
 
     /**
@@ -58,10 +39,12 @@ class Route
      */
     public static function resource(string $controller, bool $pluralize = true): ResourceRule
     {
-        return new ResourceRule([
-            'controller' => $controller,
-            'pluralize' => $pluralize,
-        ]);
+        return new ResourceRule(
+            [
+                'controller' => $controller,
+                'pluralize' => $pluralize,
+            ]
+        );
     }
 
     /**
@@ -75,6 +58,29 @@ class Route
     public static function get(string $route, string $action): RouterRule
     {
         return self::buildRule('get', $route, $action);
+    }
+
+    /**
+     * Builds a route object
+     *
+     * @param string|null $method
+     * @param string $url
+     * @param string $action
+     *
+     * @return RouterRule
+     */
+    private static function buildRule(?string $method, string $url, string $action): RouterRule
+    {
+        $config = [
+            'pattern' => $url,
+            'route' => $action,
+        ];
+
+        if ($method !== null) {
+            $config['verb'] = [$method];
+        }
+
+        return new RouterRule($config);
     }
 
     /**
@@ -139,7 +145,7 @@ class Route
      */
     public static function any(string $route, string $action): RouterRule
     {
-        return self::buildRule(false, $route, $action);
+        return self::buildRule(null, $route, $action);
     }
 
     /**

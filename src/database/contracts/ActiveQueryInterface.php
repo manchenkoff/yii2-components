@@ -14,6 +14,9 @@ use manchenkov\yii\database\ActiveRecord;
 use yii\db\ActiveQueryInterface as BaseActiveQueryInterface;
 use yii\web\NotFoundHttpException;
 
+/**
+ * @method one()
+ */
 interface ActiveQueryInterface extends BaseActiveQueryInterface
 {
     /**
@@ -34,7 +37,7 @@ interface ActiveQueryInterface extends BaseActiveQueryInterface
      *
      * @return static
      */
-    public function byID(int $id, string $column = 'id');
+    public function byID(int $id, string $column = 'id'): ActiveQueryInterface;
 
     /**
      * Throws NotFound error if no such model were found
@@ -52,7 +55,7 @@ interface ActiveQueryInterface extends BaseActiveQueryInterface
      *
      * @return static
      */
-    public function jsonKeyExists(string $key);
+    public function jsonKeyExists(string $key): ActiveQueryInterface;
 
     /**
      * Search method for JSON columns
@@ -67,7 +70,7 @@ interface ActiveQueryInterface extends BaseActiveQueryInterface
      *
      * @return static
      */
-    public function jsonWhere(string $key, $value, string $operator = '=');
+    public function jsonWhere(string $key, $value, string $operator = '='): ActiveQueryInterface;
 
     /**
      * Returns result of a query set

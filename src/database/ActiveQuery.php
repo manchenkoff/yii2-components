@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\database;
 
 use manchenkov\yii\database\contracts\ActiveQueryInterface;
@@ -16,8 +18,6 @@ use yii\web\NotFoundHttpException;
  *
  * Supports JSON columns search
  *
- * @method ActiveQueryInterface one($db = null)
- * 
  * @see ActiveRecord
  */
 class ActiveQuery extends BaseActiveQuery implements ActiveQueryInterface
@@ -27,7 +27,7 @@ class ActiveQuery extends BaseActiveQuery implements ActiveQueryInterface
         return $this->select($column)->column();
     }
 
-    public function byID(int $id, string $column = 'id')
+    public function byID(int $id, string $column = 'id'): ActiveQuery
     {
         return $this->andWhere([$column => $id]);
     }
@@ -43,12 +43,12 @@ class ActiveQuery extends BaseActiveQuery implements ActiveQueryInterface
         }
     }
 
-    public function jsonKeyExists(string $key)
+    public function jsonKeyExists(string $key): ActiveQuery
     {
         return $this->jsonWhere($key, 'NULL', 'IS NOT');
     }
 
-    public function jsonWhere(string $key, $value, string $operator = '=')
+    public function jsonWhere(string $key, $value, string $operator = '='): ActiveQuery
     {
         $keys = explode('.', $key);
 
@@ -88,9 +88,9 @@ class ActiveQuery extends BaseActiveQuery implements ActiveQueryInterface
             : $activeRecordClass::collection($data);
     }
 
-    public function first(string $column = 'created_at')
+    public function newest(string $column = 'created_at')
     {
-        return $this->orderBy($column . ' asc')->one();
+        return $this->last($column);
     }
 
     public function last(string $column = 'created_at')
@@ -98,13 +98,13 @@ class ActiveQuery extends BaseActiveQuery implements ActiveQueryInterface
         return $this->orderBy($column . ' desc')->one();
     }
 
-    public function newest(string $column = 'created_at')
-    {
-        return $this->last($column);
-    }
-
     public function oldest(string $column = 'created_at')
     {
         return $this->first($column);
+    }
+
+    public function first(string $column = 'created_at')
+    {
+        return $this->orderBy($column . ' asc')->one();
     }
 }

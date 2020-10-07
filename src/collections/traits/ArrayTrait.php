@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\collections\traits;
 
 use ArrayIterator;
@@ -45,7 +47,7 @@ trait ArrayTrait
      *
      * @return ActiveRecordInterface|mixed|null
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): ?ActiveRecordInterface
     {
         return (isset($this->elements[$offset])) ? $this->elements[$offset] : null;
     }
@@ -72,12 +74,12 @@ trait ArrayTrait
     }
 
     /**
-     * Count elements of an object
-     * @return int
+     * Checks if array is not empty
+     * @return bool
      */
-    public function count(): int
+    public function isNotEmpty(): bool
     {
-        return count($this->elements);
+        return !$this->isEmpty();
     }
 
     /**
@@ -90,11 +92,11 @@ trait ArrayTrait
     }
 
     /**
-     * Checks if array is not empty
-     * @return bool
+     * Count elements of an object
+     * @return int
      */
-    public function isNotEmpty(): bool
+    public function count(): int
     {
-        return !$this->isEmpty();
+        return count($this->elements);
     }
 }

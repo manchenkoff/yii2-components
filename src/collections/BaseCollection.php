@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\collections;
 
 use ArrayAccess;
@@ -36,7 +38,7 @@ abstract class BaseCollection implements
     /**
      * @var string Specific class to determine item's type
      */
-    protected $_itemClass;
+    protected string $_itemClass;
 
     /**
      * Include some helpful traits

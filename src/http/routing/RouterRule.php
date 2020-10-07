@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\http\routing;
 
 use yii\base\InvalidConfigException;
@@ -46,20 +48,20 @@ class RouterRule extends UrlRule
      * URL route alias to quick access in the views/controllers
      * @var string
      */
-    public $alias;
+    public string $alias;
 
     /**
      * Group prefix for alias action route
      * @var string
      */
-    public $prefix;
+    public string $prefix;
 
     /**
      * Void overriding
      */
     public function init(): void
     {
-        return;
+        /*__*/
     }
 
     /**
@@ -86,7 +88,7 @@ class RouterRule extends UrlRule
      *
      * @return static
      */
-    public function name(string $value)
+    public function name(string $value): RouterRule
     {
         $this->alias = $value;
 
@@ -100,7 +102,7 @@ class RouterRule extends UrlRule
      *
      * @return static
      */
-    public function suffix(string $value)
+    public function suffix(string $value): RouterRule
     {
         $this->suffix = $value;
 
@@ -114,7 +116,7 @@ class RouterRule extends UrlRule
      *
      * @return static
      */
-    public function defaults(array $context = [])
+    public function defaults(array $context = []): RouterRule
     {
         $this->defaults = $context;
 

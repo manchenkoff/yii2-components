@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\collections\traits;
 
 use yii\base\Arrayable;
@@ -15,6 +17,21 @@ use yii\base\Arrayable;
  */
 trait ConvertibleTrait
 {
+    /**
+     * Encodes array to a JSON string.
+     *
+     * @param array $fields Fields of model to convert
+     * @param int $options The bit mask
+     *
+     * @return string The JSON string representation of array
+     */
+    public function toJson(array $fields = [], $options = 0): string
+    {
+        $items = $this->toArray($fields);
+
+        return json_encode($items, $options);
+    }
+
     /**
      * Converts instance to a native PHP array.
      *
@@ -32,20 +49,5 @@ trait ConvertibleTrait
         }
 
         return $result;
-    }
-
-    /**
-     * Encodes array to a JSON string.
-     *
-     * @param array $fields Fields of model to convert
-     * @param int $options The bit mask
-     *
-     * @return string The JSON string representation of array
-     */
-    public function toJson(array $fields = [], $options = 0): string
-    {
-        $items = $this->toArray($fields);
-
-        return json_encode($items, $options);
     }
 }

@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\http;
 
 use yii\base\BaseObject;
@@ -22,27 +24,27 @@ class Seo extends BaseObject
     /**
      * @var View Current view instance
      */
-    private $_view;
+    private View $_view;
 
     /**
      * @var string Website main title (name)
      */
-    private $_name;
+    private string $_name;
 
     /**
      * @var string Relative path to website logo
      */
-    private $_logo;
+    private string $_logo;
 
     /**
      * @var array <meta> tags array
      */
-    private $meta = [];
+    private array $meta = [];
 
     /**
      * @var array <link> tags array
      */
-    private $links = [];
+    private array $links = [];
 
     /**
      * Initial loading when controller view was set
@@ -93,8 +95,7 @@ class Seo extends BaseObject
         string $keywords,
         bool $useOpenGraph = false,
         string $image = null
-    ): void
-    {
+    ): void {
         $this->title = $title;
 
         $this->meta[] = [
@@ -129,8 +130,7 @@ class Seo extends BaseObject
         string $title = null,
         string $description = null,
         string $image = null
-    ): void
-    {
+    ): void {
         $params = [
             'og:url' => url(request()->url, true),
             'og:type' => 'article', // fixed
@@ -141,10 +141,13 @@ class Seo extends BaseObject
         ];
 
         foreach ($params as $name => $content) {
-            $this->_view->registerMetaTag([
-                'name' => $name,
-                'content' => $content,
-            ], $name);
+            $this->_view->registerMetaTag(
+                [
+                    'name' => $name,
+                    'content' => $content,
+                ],
+                $name
+            );
         }
     }
 

@@ -5,12 +5,13 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\http;
 
 use ReflectionException;
 use ReflectionMethod;
 use Yii;
-use yii\base\Action;
 use yii\base\InlineAction;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveRecordInterface;
@@ -24,11 +25,8 @@ use yii\web\NotFoundHttpException;
 trait ActionDependencies
 {
     /**
-     * @param Action $action
-     * @param array $params
+     * {@inheritdoc}
      *
-     * @return array
-     * @throws BadRequestHttpException
      * @throws ReflectionException
      * @throws NotFoundHttpException
      */
@@ -52,7 +50,6 @@ trait ActionDependencies
             foreach ($method->getParameters() as $idx => $parameter) {
                 // find ActiveRecord instance by PK
                 if ($injectedParams[$idx] instanceof ActiveRecordInterface) {
-                    /** @var ActiveRecordInterface $activeRecord */
                     $activeRecord = $injectedParams[$idx];
 
                     $injectedParams[$idx] = $activeRecord::findOne($params[$parameter->name]);
@@ -77,26 +74,30 @@ trait ActionDependencies
 
             if (array_key_exists($name, $params)) {
                 if ($param->isArray()) {
-                    $args[] = $actionParams[$name] = (array)$params[$name];
-                } else if (!is_array($params[$name])) {
-                    $args[] = $actionParams[$name] = $params[$name];
+                    $args[] = $actionParams[$name] = (array) $params[$name];
                 } else {
-                    throw new BadRequestHttpException(
-                        t(
-                            'yii',
-                            'Invalid data received for parameter "{param}".',
-                            [
-                                'param' => $name,
-                            ]
-                        )
-                    );
+                    if (!is_array($params[$name])) {
+                        $args[] = $actionParams[$name] = $params[$name];
+                    } else {
+                        throw new BadRequestHttpException(
+                            t(
+                                'yii',
+                                'Invalid data received for parameter "{param}".',
+                                [
+                                    'param' => $name,
+                                ]
+                            )
+                        );
+                    }
                 }
 
                 unset($params[$name]);
-            } else if ($param->isDefaultValueAvailable()) {
-                $args[] = $actionParams[$name] = $param->getDefaultValue();
             } else {
-                $missing[] = $name;
+                if ($param->isDefaultValueAvailable()) {
+                    $args[] = $actionParams[$name] = $param->getDefaultValue();
+                } else {
+                    $missing[] = $name;
+                }
             }
         }
 

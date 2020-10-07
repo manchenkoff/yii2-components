@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\collections\traits;
 
 use yii\helpers\ArrayHelper;
@@ -16,21 +18,6 @@ use yii\helpers\ArrayHelper;
 trait SortableTrait
 {
     /**
-     * Sorts items by selected attribute and direction
-     *
-     * @param string $attribute
-     * @param int $sortType
-     *
-     * @return static
-     */
-    public function sortBy(string $attribute, $sortType = SORT_ASC)
-    {
-        ArrayHelper::multisort($this->elements, $attribute, $sortType);
-
-        return $this;
-    }
-
-    /**
      * Returns an item with a minimum value of specified attribute name
      *
      * @param string $attribute
@@ -40,6 +27,21 @@ trait SortableTrait
     public function min(string $attribute)
     {
         return $this->sortBy($attribute, SORT_DESC)->first();
+    }
+
+    /**
+     * Sorts items by selected attribute and direction
+     *
+     * @param string $attribute
+     * @param int $sortType
+     *
+     * @return static
+     */
+    public function sortBy(string $attribute, $sortType = SORT_ASC): SortableTrait
+    {
+        ArrayHelper::multisort($this->elements, $attribute, $sortType);
+
+        return $this;
     }
 
     /**

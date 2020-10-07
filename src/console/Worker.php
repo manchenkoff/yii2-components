@@ -5,6 +5,8 @@
  * manchenkoff.me © 2019
  */
 
+declare(strict_types=1);
+
 namespace manchenkov\yii\console;
 
 use manchenkov\yii\console\contracts\WorkerInterface;
@@ -25,12 +27,12 @@ abstract class Worker extends Command implements WorkerInterface
     /**
      * @var bool Uses for controlling handle method
      */
-    protected $canWork = true;
+    protected bool $canWork = true;
 
     /**
      * @var int Time interval between worker actions
      */
-    protected $sleepTime = 30;
+    protected int $sleepTime = 30;
 
     public function actionRun(): void
     {
@@ -56,13 +58,28 @@ abstract class Worker extends Command implements WorkerInterface
     }
 
     /**
-     * Stop worker by OS signal
+     * Executes before each handle action
      */
-    private function stop(): void
+    protected function beforeHandle(): void { }
+
+    /**
+     * @return mixed
+     */
+    abstract protected function handle(): void;
+
+    /**
+     * Executes after each handle action
+     */
+    protected function afterHandle(): void { }
+
+    /**
+     * Format 'sleepTime' as time duration
+     * @return string
+     * @throws InvalidConfigException
+     */
+    public function getWaitingTime(): string
     {
-        $this->warning('Stopping worker ...');
-        $this->canWork = false;
-        $this->onStopped();
+        return app()->formatter->asTime($this->sleepTime);
     }
 
     /**
@@ -76,32 +93,17 @@ abstract class Worker extends Command implements WorkerInterface
     }
 
     /**
-     * Format 'sleepTime' as time duration
-     * @return string
-     * @throws InvalidConfigException
+     * Stop worker by OS signal
      */
-    public function getWaitingTime(): string
+    private function stop(): void
     {
-        return app()->formatter->asTime($this->sleepTime);
+        $this->warning('Stopping worker ...');
+        $this->canWork = false;
+        $this->onStopped();
     }
-
-    /**
-     * Executes before each handle action
-     */
-    protected function beforeHandle(): void { }
-
-    /**
-     * Executes after each handle action
-     */
-    protected function afterHandle(): void { }
 
     /**
      * Executes when the worker has stopped
      */
     protected function onStopped(): void { }
-
-    /**
-     * @return mixed
-     */
-    abstract protected function handle(): void;
 }

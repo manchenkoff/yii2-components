@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace manchenkov\yii\database\contracts;
 
-use manchenkov\yii\database\ActiveCollection;
+use manchenkov\yii\collections\contracts\CollectionInterface;
 use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
 use yii\db\Exception;
@@ -17,21 +17,21 @@ use yii\db\Exception;
 /**
  * ActiveCollection component to work with strict type set of items
  */
-interface ActiveCollectionInterface
+interface ActiveCollectionInterface extends CollectionInterface
 {
     /**
      * @param $element
      *
      * @return static
      */
-    public function add($element);
+    public function add($element): ActiveCollectionInterface;
 
     /**
      * @param int $index
      *
      * @return static
      */
-    public function remove(int $index);
+    public function remove(int $index): ActiveCollectionInterface;
 
     /**
      * @param string $attributeName
@@ -63,40 +63,40 @@ interface ActiveCollectionInterface
     /**
      * @return static
      */
-    public function clear();
+    public function clear(): ActiveCollectionInterface;
 
     /**
      * @param callable $callback
      *
-     * @return ActiveCollection
+     * @return ActiveCollectionInterface
      */
-    public function filter(callable $callback);
+    public function filter(callable $callback): ActiveCollectionInterface;
 
     /**
      * @return static
      */
-    public function reverse();
+    public function reverse(): ActiveCollectionInterface;
 
     /**
      * @return static
      */
-    public function shuffle();
+    public function shuffle(): ActiveCollectionInterface;
 
     /**
      * @param $offset
      * @param null $length
      * @param bool $preserveKeys
      *
-     * @return ActiveCollection
+     * @return ActiveCollectionInterface
      */
-    public function slice($offset, $length = null, $preserveKeys = false);
+    public function slice($offset, $length = null, $preserveKeys = false): ActiveCollectionInterface;
 
     /**
      * @param callable $callback
      *
      * @return static|mixed
      */
-    public function walk(callable $callback);
+    public function walk(callable $callback): ActiveCollectionInterface;
 
     /**
      * @param callable $callback
