@@ -43,15 +43,15 @@ class ResourceRule extends CompositeUrlRule
     /**
      * Controller key to search models
      * Default value is resource controller name: `$this->controller`
-     * @var string
+     * @var string|null
      */
-    protected string $token;
+    protected ?string $token = null;
 
     /**
      * URL prefix
-     * @var string
+     * @var string|null
      */
-    protected string $prefix;
+    protected ?string $prefix = null;
 
     /**
      * Additional rules for resource controller (without controller name)
