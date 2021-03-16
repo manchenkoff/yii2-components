@@ -13,5 +13,5 @@ composer require manchenkov/yii2-components
 or you can add this line to `require` section of `composer.json`
 
 ```
-"manchenkov/yii2-components": "^2.0.2"
+"manchenkov/yii2-components": "^3.0.0"
 ```
