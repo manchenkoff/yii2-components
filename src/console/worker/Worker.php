@@ -1,15 +1,11 @@
 <?php
-/**
- * Created by Artyom Manchenkov
- * artyom@manchenkoff.me
- * manchenkoff.me © 2019
- */
 
 declare(strict_types=1);
 
-namespace manchenkov\yii\console;
+namespace manchenkov\yii\console\worker;
 
-use manchenkov\yii\console\contracts\WorkerInterface;
+use manchenkov\yii\console\command\Command;
+use Yii;
 use yii\base\InvalidConfigException;
 
 /**
@@ -19,9 +15,6 @@ use yii\base\InvalidConfigException;
  */
 abstract class Worker extends Command implements WorkerInterface
 {
-    /**
-     * @var string Default controller action name
-     */
     public $defaultAction = 'run';
 
     /**
@@ -32,35 +25,32 @@ abstract class Worker extends Command implements WorkerInterface
     /**
      * @var int Time interval between worker actions
      */
-    protected int $sleepTime = 30;
+    protected int $secondsToSleep = 1;
 
     public function actionRun(): void
     {
-        // handle OS signals
         pcntl_signal(SIGQUIT, [$this, 'signalHandler']);
         pcntl_signal(SIGINT, [$this, 'signalHandler']);
 
-        // main infinite loop
-        while ($this->canWork) {
+        while ($this->isEnabled()) {
             $this->beforeHandle();
-
-            $this->info("Start processing ...");
             $this->handle();
-            $this->info("End processing ...");
-
             $this->afterHandle();
 
             pcntl_signal_dispatch();
 
             $this->info("Wait for the next loop ... (Waiting time: {$this->waitingTime})");
-            sleep($this->sleepTime);
+
+            sleep($this->secondsToSleep);
         }
     }
 
     /**
      * Executes before each handle action
      */
-    protected function beforeHandle(): void { }
+    protected function beforeHandle(): void
+    {
+    }
 
     /**
      * @return mixed
@@ -70,7 +60,9 @@ abstract class Worker extends Command implements WorkerInterface
     /**
      * Executes after each handle action
      */
-    protected function afterHandle(): void { }
+    protected function afterHandle(): void
+    {
+    }
 
     /**
      * Format 'sleepTime' as time duration
@@ -79,7 +71,7 @@ abstract class Worker extends Command implements WorkerInterface
      */
     public function getWaitingTime(): string
     {
-        return app()->formatter->asTime($this->sleepTime);
+        return Yii::$app->formatter->asTime($this->secondsToSleep);
     }
 
     /**
@@ -88,7 +80,6 @@ abstract class Worker extends Command implements WorkerInterface
     private function signalHandler(): void
     {
         $this->stop();
-        $this->success('Worker has stopped');
         exit();
     }
 
@@ -97,13 +88,21 @@ abstract class Worker extends Command implements WorkerInterface
      */
     private function stop(): void
     {
-        $this->warning('Stopping worker ...');
+        $this->warning("Stopping worker ...");
         $this->canWork = false;
+
         $this->onStopped();
     }
 
     /**
      * Executes when the worker has stopped
      */
-    protected function onStopped(): void { }
+    protected function onStopped(): void
+    {
+    }
+
+    public function isEnabled(): bool
+    {
+        return $this->canWork;
+    }
 }

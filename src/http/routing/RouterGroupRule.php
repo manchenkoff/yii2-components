@@ -1,9 +1,4 @@
 <?php
-/**
- * Created by Artyom Manchenkov
- * artyom@manchenkoff.me
- * manchenkoff.me © 2019
- */
 
 declare(strict_types=1);
 
@@ -12,7 +7,7 @@ namespace manchenkov\yii\http\routing;
 use yii\base\InvalidConfigException;
 use yii\web\GroupUrlRule;
 
-class RouterGroupRule extends GroupUrlRule
+final class RouterGroupRule extends GroupUrlRule implements RouterRuleInterface
 {
     /**
      * URL pattern route prefix
@@ -28,9 +23,9 @@ class RouterGroupRule extends GroupUrlRule
 
     /**
      * Rules config array
-     * @var array
+     * @var RouterRule[]
      */
-    public $rules = [];
+    public $rules;
 
     /**
      * URL address suffix
@@ -38,14 +33,13 @@ class RouterGroupRule extends GroupUrlRule
      */
     public string $suffix;
 
-    /**
-     * Builds group rules
-     * @throws InvalidConfigException
-     */
     public function build(): void
     {
         foreach ($this->rules as $rule) {
-            /** @var $rule RouterRule */
+            if (!$rule instanceof RouterRule) {
+                throw new InvalidConfigException('RouterGroupUrl works with RouterRule objects only');
+            }
+
             $rule->pattern = "{$this->prefix}/{$rule->pattern}";
             $rule->prefix = $this->routePrefix;
 
@@ -70,7 +64,7 @@ class RouterGroupRule extends GroupUrlRule
     /**
      * Sets the rules configuration array to the group
      *
-     * @param array $rules
+     * @param RouterRule[] $rules
      *
      * @return static
      */

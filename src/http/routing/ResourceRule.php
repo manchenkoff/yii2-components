@@ -1,9 +1,4 @@
 <?php
-/**
- * Created by Artyom Manchenkov
- * artyom@manchenkoff.me
- * manchenkoff.me © 2019
- */
 
 declare(strict_types=1);
 
@@ -26,7 +21,7 @@ use yii\web\CompositeUrlRule;
  *
  * @package manchenkov\yii\http\routing
  */
-class ResourceRule extends CompositeUrlRule
+final class ResourceRule extends CompositeUrlRule implements RouterRuleInterface
 {
     /**
      * Resource controller name/id
@@ -45,19 +40,19 @@ class ResourceRule extends CompositeUrlRule
      * Default value is resource controller name: `$this->controller`
      * @var string|null
      */
-    protected ?string $token = null;
+    public ?string $token = null;
 
     /**
      * URL prefix
      * @var string|null
      */
-    protected ?string $prefix = null;
+    public ?string $prefix = null;
 
     /**
      * Additional rules for resource controller (without controller name)
      * @var RouterRule[]
      */
-    protected array $extraRules = [];
+    public array $extraRules = [];
 
     /**
      * Overrides parent action
@@ -67,10 +62,6 @@ class ResourceRule extends CompositeUrlRule
         $this->rules = [];
     }
 
-    /**
-     * Builds all of the resource controller routes
-     * @throws InvalidConfigException
-     */
     public function build(): void
     {
         $this->rules = array_merge(
@@ -83,11 +74,11 @@ class ResourceRule extends CompositeUrlRule
 
     /**
      * Defaults resource controller routes
-     * @return array
+     * @return RouterRule[]
      */
     protected function resourceRules(): array
     {
-        if (is_null($this->token)) {
+        if ($this->token === null) {
             $this->token = $this->controller;
         }
 
@@ -121,21 +112,17 @@ class ResourceRule extends CompositeUrlRule
             : $this->controller;
 
         // append custom prefix if exists
-        if ($this->prefix) {
+        if ($this->prefix !== null) {
             $normalizedPrefix = "{$this->prefix}/{$normalizedPrefix}";
         }
 
         // normalize each rule
         foreach ($this->rules as $rule) {
-            // check rules class
             if (!$rule instanceof RouterRule) {
-                throw new InvalidConfigException('All rules must be an instance of RouterRule class');
+                throw new InvalidConfigException('ResourceRule works with RouterRule objects only');
             }
 
-            // set URL prefix
             $rule->pattern = rtrim("{$normalizedPrefix}/{$rule->pattern}", '/');
-
-            // append controller path to the actions
             $rule->route = "{$this->controller}/{$rule->route}";
 
             $rule->build();

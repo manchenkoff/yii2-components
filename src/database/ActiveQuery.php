@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by Artyom Manchenkov
- * artyom@manchenkoff.me
- * manchenkoff.me © 2019
- */
 
 declare(strict_types=1);
 
 namespace manchenkov\yii\database;
 
-use manchenkov\yii\database\contracts\ActiveQueryInterface;
 use yii\db\ActiveQuery as BaseActiveQuery;
 use yii\web\NotFoundHttpException;
 
@@ -38,9 +32,9 @@ class ActiveQuery extends BaseActiveQuery implements ActiveQueryInterface
 
         if ($model) {
             return $model;
-        } else {
-            throw new NotFoundHttpException();
         }
+
+        throw new NotFoundHttpException();
     }
 
     public function jsonKeyExists(string $key): ActiveQuery
@@ -55,16 +49,12 @@ class ActiveQuery extends BaseActiveQuery implements ActiveQueryInterface
         $column = array_shift($keys);
         $key = implode('.', $keys);
 
-        if (is_array($value) && $operator == '=') {
+        if (is_array($value) && $operator === '=') {
             $operator = 'in';
-            $value = "(" . implode(',', $value) . ")";
+            $value = sprintf('(%s)', implode(',', $value));
         }
 
-        if (is_integer($key)) {
-            $key = "$[{$key}]";
-        } else {
-            $key = "$.{$key}";
-        }
+        $key = sprintf(is_int($key) ? '$[%s]' : '$.%s', $key);
 
         // column->>'$[0]' = value
         // column->>'$.key' = value

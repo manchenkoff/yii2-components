@@ -1,9 +1,4 @@
 <?php
-/**
- * Created by Artyom Manchenkov
- * artyom@manchenkoff.me
- * manchenkoff.me © 2019
- */
 
 declare(strict_types=1);
 
@@ -26,7 +21,7 @@ trait SoftDelete
      */
     public function getIsDeleted(): bool
     {
-        return !is_null($this->deleted_at);
+        return $this->deleted_at !== null;
     }
 
     /**
@@ -42,10 +37,12 @@ trait SoftDelete
 
     /**
      * Full removing record
+     *
+     * @return int|bool
      */
     public function destroy()
     {
-        parent::delete();
+        return parent::delete();
     }
 
     /**

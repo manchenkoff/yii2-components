@@ -14,10 +14,19 @@
       "manchenkov\\yii\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "tests\\": "tests/"
+    }
+  },
   "require": {
-    "manchenkov/yii2-helpers": "^1.0",
     "bocharsky-bw/arrayzy": "^0.6.1",
     "ext-pcntl": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "yiisoft/yii2": "2.0.41.1"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master",
+    "phpunit/phpunit": "^9.5"
   }
 }
