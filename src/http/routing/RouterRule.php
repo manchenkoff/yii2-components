@@ -10,36 +10,6 @@ use yii\web\UrlRule;
 final class RouterRule extends UrlRule implements RouterRuleInterface
 {
     /**
-     * Controller route path
-     * @var string
-     */
-    public $route;
-
-    /**
-     * URL rule pattern
-     * @var string
-     */
-    public $pattern;
-
-    /**
-     * Request method GET|POST|PUT...
-     * @var string
-     */
-    public $verb;
-
-    /**
-     * Default GET parameters' values
-     * @var array
-     */
-    public $defaults;
-
-    /**
-     * URL route suffix like '.html', '.php'
-     * @var string
-     */
-    public $suffix;
-
-    /**
      * URL route alias to quick access in the views/controllers
      * @var string
      */
