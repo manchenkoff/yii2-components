@@ -1,247 +1,72 @@
 <?php
-/**
- * Created by Artyom Manchenkov
- * artyom@manchenkoff.me
- * manchenkoff.me © 2019
- */
 
 declare(strict_types=1);
 
 namespace manchenkov\yii\database;
 
-use InvalidArgumentException;
-use manchenkov\yii\collections\BaseCollection;
-use manchenkov\yii\database\contracts\ActiveCollectionInterface;
+use manchenkov\yii\collections\Collection;
+use RuntimeException;
+use Yii;
 
-class ActiveCollection extends BaseCollection implements ActiveCollectionInterface
+final class ActiveCollection extends Collection implements ActiveCollectionInterface
 {
-    /**
-     * ActiveCollection constructor.
-     *
-     * @param array $elements
-     * @param string $className
-     */
-    public function __construct(array $elements, string $className)
-    {
-        $this->_itemClass = $className;
-
-        foreach ($elements as $element) {
-            $this->checkElementType($element);
-        }
-
-        $this->elements = $elements;
-    }
-
-    /**
-     * @param $element
-     */
-    private function checkElementType($element)
-    {
-        if (!$element instanceof $this->_itemClass) {
-            throw new InvalidArgumentException("All of the collection items must be an instance of the same class");
-        }
-    }
-
-    public function add($element): ActiveCollection
-    {
-        $this->checkElementType($element);
-
-        $this->elements[] = $element;
-
-        return $this;
-    }
-
-    public function remove(int $index): ActiveCollection
-    {
-        $this->offsetUnset($index);
-
-        return $this;
-    }
-
-    public function implode(string $attribute, string $delimiter = ','): string
-    {
-        return implode($delimiter, $this->attribute($attribute));
-    }
-
-    public function attribute(string $attributeName): array
-    {
-        return $this->map(
-            function ($item) use ($attributeName) {
-                return $item->{$attributeName};
-            }
-        );
-    }
-
-    public function map(callable $callback): array
-    {
-        return array_map(
-            $callback,
-            $this->elements
-        );
-    }
-
-    public function sum(string $attributeName)
-    {
-        return array_reduce(
-            $this->elements,
-            function ($total, $model) use ($attributeName) {
-                return $total + $model->{$attributeName};
-            },
-            0
-        );
-    }
-
-    public function all(): array
-    {
-        return $this->elements;
-    }
-
-    public function clear(): ActiveCollection
-    {
-        $this->elements = [];
-
-        return $this;
-    }
-
-    public function filter(callable $callback): ActiveCollection
-    {
-        return new static(
-            array_filter(
-                $this->elements,
-                $callback
-            ),
-            $this->_itemClass
-        );
-    }
-
-    public function reverse(): ActiveCollection
-    {
-        $this->elements = array_reverse($this->elements);
-
-        return $this;
-    }
-
-    public function shuffle(): ActiveCollection
-    {
-        shuffle($this->elements);
-
-        return $this;
-    }
-
-    public function slice($offset, $length = null, $preserveKeys = false): ActiveCollection
-    {
-        return new static(
-            array_slice(
-                $this->elements,
-                $offset,
-                $length,
-                $preserveKeys
-            ),
-            $this->_itemClass
-        );
-    }
-
-    public function walk(callable $callback): ActiveCollection
-    {
-        array_walk($this->elements, $callback);
-
-        return $this;
-    }
-
-    public function find(string $attribute, $value): int
-    {
-        $index = -1;
-
-        foreach ($this->elements as $idx => $element) {
-            if ($element->{$attribute} == $value) {
-                $index = $idx;
-                break;
-            }
-        }
-
-        return $index;
-    }
-
-    public function contains($element): bool
-    {
-        return in_array($element, $this->elements, true);
-    }
-
-    public function split(int $size, bool $preserveKeys): array
-    {
-        return array_chunk($this->elements, $size, $preserveKeys);
-    }
-
-    public function exists(callable $callback): bool
-    {
-        $isExists = false;
-
-        foreach ($this->elements as $item) {
-            if ($callback($item)) {
-                $isExists = true;
-                break;
-            }
-        }
-
-        return $isExists;
-    }
-
     public function save(): bool
     {
-        $completed = true;
+        Yii::$app->db->beginTransaction();
 
-        app()->db->beginTransaction();
-
-        foreach ($this->elements as $item) {
-            if (!$item->save()) {
-                $completed = false;
-                break;
+        try {
+            foreach ($this->elements as $item) {
+                if (!$item->save()) {
+                    throw new RuntimeException(
+                        sprintf('Unable to save record: %s', get_class($item))
+                    );
+                }
             }
+
+            Yii::$app->db->transaction->commit();
+
+            return true;
+        } catch (RuntimeException $exception) {
+            Yii::$app->db->transaction->rollBack();
         }
 
-        if ($completed) {
-            app()->db->transaction->commit();
-        } else {
-            app()->db->transaction->rollBack();
-        }
-
-        return $completed;
+        return false;
     }
 
     public function delete(): bool
     {
-        $completed = true;
+        Yii::$app->db->beginTransaction();
 
-        app()->db->beginTransaction();
-
-        foreach ($this->elements as $item) {
-            if (!$item->delete()) {
-                $completed = false;
-                break;
+        try {
+            foreach ($this->elements as $item) {
+                if (!$item->delete()) {
+                    throw new RuntimeException(
+                        sprintf('Unable to delete record: %s', get_class($item))
+                    );
+                }
             }
+
+            Yii::$app->db->transaction->commit();
+
+            return true;
+        } catch (RuntimeException $exception) {
+            Yii::$app->db->transaction->rollBack();
         }
 
-        if ($completed) {
-            app()->db->transaction->commit();
-        } else {
-            app()->db->transaction->rollBack();
-        }
-
-        return $completed;
+        return false;
     }
 
     public function validate(): bool
     {
-        $completed = true;
+        $isValid = true;
 
         foreach ($this->elements as $item) {
             if (!$item->validate()) {
-                $completed = false;
-                break;
+                $isValid = false;
             }
         }
 
-        return $completed;
+        return $isValid;
     }
 
     public function errors(): array

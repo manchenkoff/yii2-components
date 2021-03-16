@@ -1,17 +1,10 @@
 <?php
-/**
- * Created by Artyom Manchenkov
- * artyom@manchenkoff.me
- * manchenkoff.me © 2019
- */
 
 declare(strict_types=1);
 
 namespace manchenkov\yii\database;
 
-use manchenkov\yii\components\Printable;
-use manchenkov\yii\database\contracts\ActiveCollectionInterface;
-use manchenkov\yii\database\contracts\ActiveRecordInterface;
+use manchenkov\yii\traits\Printable;
 use yii\db\ActiveRecord as BaseActiveRecord;
 use yii\web\NotFoundHttpException;
 
@@ -39,10 +32,10 @@ class ActiveRecord extends BaseActiveRecord implements ActiveRecordInterface
      *
      * @param $condition
      *
-     * @return ActiveRecord|null
+     * @return ActiveRecord
      * @throws NotFoundHttpException
      */
-    public static function findOrFail($condition): ?ActiveRecord
+    public static function findOrFail($condition): ActiveRecord
     {
         return static::find()->where($condition)->oneOrFail();
     }
@@ -58,7 +51,7 @@ class ActiveRecord extends BaseActiveRecord implements ActiveRecordInterface
 
     public function hasOne($class, $link = [])
     {
-        /** @var $class ActiveRecord */
+        /** @var $class  */
         if (empty($link)) {
             $table = static::tableName();
             $pk = current(static::primaryKey());

@@ -1,13 +1,8 @@
 <?php
-/**
- * Created by Artyom Manchenkov
- * artyom@manchenkoff.me
- * manchenkoff.me © 2019
- */
 
 declare(strict_types=1);
 
-namespace manchenkov\yii\components;
+namespace manchenkov\yii\traits;
 
 use yii\db\ActiveRecordInterface;
 
@@ -20,6 +15,7 @@ trait Printable
     /**
      * Returns object presentation as a string
      * @return string
+     * @noinspection JsonEncodingApiUsageInspection
      */
     public function __toString(): string
     {
@@ -29,7 +25,7 @@ trait Printable
             $data = [
                 'attributes' => $this->getAttributes(),
                 'errors' => $this->getErrors(),
-                'isSaved' => $this->getIsNewRecord(),
+                'isNewRecord' => $this->getIsNewRecord(),
             ];
         } else {
             $data = get_object_vars($this);

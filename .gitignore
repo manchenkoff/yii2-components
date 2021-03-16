@@ -14,3 +14,6 @@ Thumbs.db
 composer.phar
 composer.lock
 /vendor
+
+# Linter files
+.php_cs.cache

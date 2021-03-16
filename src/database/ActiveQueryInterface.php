@@ -1,16 +1,9 @@
 <?php
-/**
- * Created by Artyom Manchenkov
- * artyom@manchenkoff.me
- * manchenkoff.me © 2020
- */
 
 declare(strict_types=1);
 
-namespace manchenkov\yii\database\contracts;
+namespace manchenkov\yii\database;
 
-use manchenkov\yii\database\ActiveCollection;
-use manchenkov\yii\database\ActiveRecord;
 use yii\db\ActiveQueryInterface as BaseActiveQueryInterface;
 use yii\web\NotFoundHttpException;
 

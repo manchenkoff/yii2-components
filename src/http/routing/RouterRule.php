@@ -1,18 +1,13 @@
 <?php
-/**
- * Created by Artyom Manchenkov
- * artyom@manchenkoff.me
- * manchenkoff.me © 2019
- */
 
 declare(strict_types=1);
 
 namespace manchenkov\yii\http\routing;
 
-use yii\base\InvalidConfigException;
+use Yii;
 use yii\web\UrlRule;
 
-class RouterRule extends UrlRule
+final class RouterRule extends UrlRule implements RouterRuleInterface
 {
     /**
      * Controller route path
@@ -36,7 +31,7 @@ class RouterRule extends UrlRule
      * Default GET parameters' values
      * @var array
      */
-    public $defaults = [];
+    public $defaults;
 
     /**
      * URL route suffix like '.html', '.php'
@@ -57,17 +52,13 @@ class RouterRule extends UrlRule
     public string $prefix;
 
     /**
-     * Void overriding
+     * Overrides parent action
      */
     public function init(): void
     {
         /*__*/
     }
 
-    /**
-     * Registers route
-     * @throws InvalidConfigException
-     */
     public function build(): void
     {
         if (!empty($this->prefix)) {
@@ -75,7 +66,7 @@ class RouterRule extends UrlRule
         }
 
         if (!empty($this->alias)) {
-            alias("@{$this->alias}", $this->route);
+            Yii::setAlias("@{$this->alias}", $this->route);
         }
 
         parent::init();

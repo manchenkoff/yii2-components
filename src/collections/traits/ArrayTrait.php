@@ -1,9 +1,4 @@
 <?php
-/**
- * Created by Artyom Manchenkov
- * artyom@manchenkoff.me
- * manchenkoff.me © 2019
- */
 
 declare(strict_types=1);
 
@@ -11,16 +6,17 @@ namespace manchenkov\yii\collections\traits;
 
 use ArrayIterator;
 use Traversable;
-use yii\db\ActiveRecordInterface;
 
 /**
  * A trait with basic array access methods
- * @property $elements
+ *
+ * @property array $elements
  */
 trait ArrayTrait
 {
     /**
      * Retrieve an external iterator
+     *
      * @return ArrayIterator|Traversable
      */
     public function getIterator()
@@ -37,7 +33,7 @@ trait ArrayTrait
      */
     public function offsetExists($offset): bool
     {
-        return isset($this->elements[$offset]);
+        return array_key_exists($offset, $this->elements);
     }
 
     /**
@@ -45,11 +41,11 @@ trait ArrayTrait
      *
      * @param mixed $offset
      *
-     * @return ActiveRecordInterface|mixed|null
+     * @return mixed|null
      */
-    public function offsetGet($offset): ?ActiveRecordInterface
+    public function offsetGet($offset)
     {
-        return (isset($this->elements[$offset])) ? $this->elements[$offset] : null;
+        return $this->elements[$offset] ?? null;
     }
 
     /**
@@ -58,7 +54,7 @@ trait ArrayTrait
      * @param mixed $offset
      * @param mixed $value
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->elements[$offset] = $value;
     }
@@ -68,35 +64,38 @@ trait ArrayTrait
      *
      * @param mixed $offset
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->elements[$offset]);
     }
 
     /**
-     * Checks if array is not empty
-     * @return bool
-     */
-    public function isNotEmpty(): bool
-    {
-        return !$this->isEmpty();
-    }
-
-    /**
-     * Checks if array is empty
-     * @return bool
-     */
-    public function isEmpty(): bool
-    {
-        return $this->count() > 0;
-    }
-
-    /**
      * Count elements of an object
+     *
      * @return int
      */
     public function count(): int
     {
         return count($this->elements);
+    }
+
+    /**
+     * Checks if array is empty
+     *
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return $this->count() === 0;
+    }
+
+    /**
+     * Checks if array is not empty
+     *
+     * @return bool
+     */
+    public function isNotEmpty(): bool
+    {
+        return !$this->isEmpty();
     }
 }

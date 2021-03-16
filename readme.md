@@ -4,7 +4,7 @@ Improved components for [Yii 2 project](https://github.com/manchenkoff/yii2-proj
 
 ## Installation
 
-You have to run following command to add a dependency to your project
+You have to run the following command to add a dependency to your project
 
 ```bash
 composer require manchenkov/yii2-components
@@ -13,5 +13,5 @@ composer require manchenkov/yii2-components
 or you can add this line to `require` section of `composer.json`
 
 ```
-"manchenkov/yii2-components": "*"
+"manchenkov/yii2-components": "^2.0.2"
 ```

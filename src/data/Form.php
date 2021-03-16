@@ -1,9 +1,4 @@
 <?php
-/**
- * Created by Artyom Manchenkov
- * artyom@manchenkoff.me
- * manchenkoff.me © 2020
- */
 
 declare(strict_types=1);
 
@@ -13,9 +8,9 @@ use yii\base\Model;
 
 abstract class Form extends Model
 {
-    public function load($data, $formName = null): bool
+    public function check($data, $formName = null): bool
     {
-        $loaded = parent::load($data, $formName);
+        $loaded = $this->load($data, $formName);
 
         if ($loaded) {
             return $this->validate();
