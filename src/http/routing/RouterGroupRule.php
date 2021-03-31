@@ -7,26 +7,13 @@ namespace manchenkov\yii\http\routing;
 use yii\base\InvalidConfigException;
 use yii\web\GroupUrlRule;
 
+/**
+ * @property string $prefix
+ * @property string $routePrefix
+ * @property RouterRule[] $rules
+ */
 final class RouterGroupRule extends GroupUrlRule implements RouterRuleInterface
 {
-    /**
-     * URL pattern route prefix
-     * @var string
-     */
-    public $prefix;
-
-    /**
-     * Controller or module name prefix
-     * @var string
-     */
-    public $routePrefix;
-
-    /**
-     * Rules config array
-     * @var RouterRule[]
-     */
-    public $rules;
-
     /**
      * URL address suffix
      * @var string
